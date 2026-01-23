@@ -7,15 +7,15 @@
     let selectedAlgorithm = ref("")
     let startVertex = ref("")
     let targetVertex = ref("")
-    let distanceDataStructure = ref(null)
+    let distanceJSONString = ref("")
     let graphProcessingResult = ref(null)
 
-    function getJsonData(event) {
+    function getJsonDataFromFile(event) {
         const file = event.target.files[0]
         const reader = new FileReader()
         reader.readAsText(file)
         reader.onload = () => {
-            distanceDataStructure.value = JSON.parse(reader.result);
+            distanceJSONString.value = reader.result;
         }
     }
 
@@ -37,7 +37,8 @@
                 console.error("Algorithm don`t selected")
         }
         try {
-            const response = await axios.post(shortestPathUrl, distanceDataStructure.value)
+            const jsonObject = JSON.parse(distanceJSONString.value)
+            const response = await axios.post(shortestPathUrl, jsonObject)
             graphProcessingResult.value = response.data
         }
         catch (error) {
@@ -50,7 +51,9 @@
 <template>
     <h1>GraphProcessor</h1>
     <form @submit.prevent>
-        <input type="file" accept=".json" @input="getJsonData($event)"><br><br>
+        <input type="file" accept=".json" @input="getJsonDataFromFile($event)"><br>
+        <p>Or enter JSON string in text area</p>
+        <textarea v-model="distanceJSONString" rows="15" cols="30"></textarea><br><br>
         <select v-model="selectedAlgorithm">
             <option disabled value="">Select algorithm</option>
             <option>dfs</option>
@@ -58,7 +61,7 @@
             <option>dijkstra</option>
         </select>
         <br><br>
-        <div v-if="distanceDataStructure">
+        <div v-if="distanceJSONString">
             <div v-if="selectedAlgorithm == 'bfs' || selectedAlgorithm == 'dijkstra'" >
                 <input v-model="startVertex" type="text" placeholder="Enter start vertex">
                 <input v-model="targetVertex" type="text" placeholder="Enter target vertex">
