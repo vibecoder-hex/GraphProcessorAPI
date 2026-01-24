@@ -39,11 +39,8 @@ namespace Src.Views
             List<string> bfsPath = DistanceGraphProcessing.BfsTraversal(jsonData.Distances, start, target);
             stopwatch.Stop();
             
-
             if (bfsPath.Count == 0)
-            {
                 return Results.BadRequest(new { Error = "No path found between the specified nodes." });
-            }
 
             var result = new BfsResultDTO
             {

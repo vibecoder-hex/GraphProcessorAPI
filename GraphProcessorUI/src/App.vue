@@ -9,6 +9,7 @@
     let targetVertex = ref("")
     let distanceJSONString = ref("")
     let graphProcessingResult = ref(null)
+    let errorMessage = ref("")
 
     function getJsonDataFromFile(event) {
         const file = event.target.files[0]
@@ -21,7 +22,7 @@
 
     async function getPathFromAPI() {
         if (!startVertex.value || !targetVertex) {
-            console.error("Vertex fields is empty")
+            errorMessage.value = "Vertex fields is empty"
             return
         }
         let shortestPathUrl = null
@@ -37,12 +38,11 @@
                 console.error("Algorithm don`t selected")
         }
         try {
-            const jsonObject = JSON.parse(distanceJSONString.value)
-            const response = await axios.post(shortestPathUrl, jsonObject)
+            const distanceJSONObject = JSON.parse(distanceJSONString.value)
+            const response = await axios.post(shortestPathUrl, distanceJSONObject)
             graphProcessingResult.value = response.data
-        }
-        catch (error) {
-            console.log(error)
+        } catch(error) {
+            errorMessage.value = `Error: ${error}`
         }
     }
 
@@ -82,6 +82,8 @@
             <li>Time: {{ graphProcessingResult.result.timeNs }} nanoseconds</li>
         </ul>
     </div>
+    <br>
+    <div>{{ errorMessage }}</div>
 </template>
 
 <style scoped></style>
