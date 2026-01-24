@@ -7,7 +7,7 @@
         public string Algorithm { get; set; }
         public string StartVertex { get; set; }
         public List<string> ShortestPath { get; set; }
-        public double TimeMs { get; set; }
+        public double TimeNs { get; set; }
     }
 
     public class DijkstraResultDTO : AlgorithmResultDTO

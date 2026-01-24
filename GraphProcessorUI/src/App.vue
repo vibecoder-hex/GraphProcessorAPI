@@ -72,7 +72,16 @@
             <button @click="getPathFromAPI()">Send path</button>
         </div>
     </form>
-    <h3>{{ graphProcessingResult }}</h3>
+    <div v-if="graphProcessingResult">
+        <p>Result</p>
+        <ul>
+            <li>Start Vertex: {{ graphProcessingResult.result.startVertex }}</li>
+            <li>Target Vertex: {{ graphProcessingResult.result.targetVertex }}</li>
+            <li>Path: {{ graphProcessingResult.result.shortestPath.join("->") }}</li>
+            <li>Algorithm: {{ graphProcessingResult.result.algorithm }}</li>
+            <li>Time: {{ graphProcessingResult.result.timeNs }} nanoseconds</li>
+        </ul>
+    </div>
 </template>
 
 <style scoped></style>

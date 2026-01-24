@@ -1,5 +1,6 @@
 ﻿using Src.DTOs;
 using Src.GraphProcessor;
+using System.Diagnostics;
 
 namespace Src.Views
 {
@@ -24,15 +25,20 @@ namespace Src.Views
             return true;
         }
     }
+    
 
     public static class AlgorithmViews
     {
-        public static IResult BfsView(string start, string target, DistanceDataJsonDTO jsonData)
+        public static IResult BfsView(string start, string target, DistanceDataJsonDTO jsonData, ILogger<Program> logger)
         {
             if (!ValidationProcessor.IsValidForShortestPath(start, target, jsonData))
                 return Results.BadRequest(new { Error = "Invalid input data or JSON is empty" });
-
+            
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             List<string> bfsPath = DistanceGraphProcessing.BfsTraversal(jsonData.Distances, start, target);
+            stopwatch.Stop();
+            
 
             if (bfsPath.Count == 0)
             {
@@ -45,8 +51,9 @@ namespace Src.Views
                 StartVertex = start,
                 TargetVertex = target,
                 ShortestPath = bfsPath,
-                TimeMs = 0 // Placeholder for execution time
+                TimeNs = stopwatch.Elapsed.Nanoseconds, 
             };
+            
             return Results.Ok(new { Result = result });
         }
 
@@ -54,8 +61,11 @@ namespace Src.Views
         {
             if (!ValidationProcessor.IsValidForShortestPath(start, target, jsonData))
                 return Results.BadRequest(new { Error = "Invalid input data or JSON is empty" });
-
+            
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             List<string> dijkstraPath = DistanceGraphProcessing.DijkstraShortestPath(jsonData.Distances, start, target);
+            stopwatch.Stop();
 
             if (dijkstraPath.Count == 0)
                 return Results.BadRequest(new { Error = "No path found between the specified nodes." });
@@ -66,8 +76,8 @@ namespace Src.Views
                 StartVertex = start,
                 TargetVertex = target,
                 ShortestPath = dijkstraPath,
-                TimeMs = 0, // Placeholder for execution time
-                TotalDistance = 0 // Placeholder for total distance
+                TimeNs = stopwatch.Elapsed.Nanoseconds,
+                TotalDistance = 0, // Placeholder for total distance
             };
 
             return Results.Ok(new { Result = result });
@@ -77,9 +87,12 @@ namespace Src.Views
         {
             if (!ValidationProcessor.IsValidForDfs(start, jsonData))
                 return Results.BadRequest(new { Error = "Invalid input data or JSON is empty" });
-
+            
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             List<string> dfsPath = DistanceGraphProcessing.DfsTraversal(jsonData.Distances, start);
-
+            stopwatch.Stop();
+            
             if (dfsPath.Count == 0)
                 return Results.BadRequest(new { Error = "No nodes reachable from the specified start node." });
 
@@ -88,7 +101,7 @@ namespace Src.Views
                 Algorithm = "DFS",
                 StartVertex = start,
                 ShortestPath = dfsPath,
-                TimeMs = 0 // Placeholder for execution time
+                TimeNs = stopwatch.Elapsed.Nanoseconds,
             };
             return Results.Ok(new { Result = result });
         }
