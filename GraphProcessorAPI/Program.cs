@@ -37,8 +37,7 @@ app.UseHttpLogging();
 if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler();
 
-app.MapGet("/api/health", () => Results.Ok(new { Status = "Graph Processor API is running." }))
-    .WithName("HealthCheck");
 EndpointsProcessor.GraphProcessorEndpoints(app.MapGroup("/api/graph_processor"));
+EndpointsProcessor.ServiceEndpoits(app.MapGroup("/api/service"));
 
 app.Run();

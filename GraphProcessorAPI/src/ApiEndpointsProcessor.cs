@@ -4,14 +4,19 @@ namespace Src.ApiEndpointsProcessor
 {
     public static class EndpointsProcessor
     {
-        public static void GraphProcessorEndpoints(RouteGroupBuilder GraphProcessorGroup)
+        public static void GraphProcessorEndpoints(RouteGroupBuilder graphProcessorGroup)
         {
-            GraphProcessorGroup.MapPost("/bfs/{start}/{target}", AlgorithmViews.BfsView)
+            graphProcessorGroup.MapPost("/bfs/{start}/{target}", AlgorithmViews.BfsView)
                 .WithName("BfsAlgorithm");
-            GraphProcessorGroup.MapPost("/dfs/{start}", AlgorithmViews.DfsView)
+            graphProcessorGroup.MapPost("/dfs/{start}", AlgorithmViews.DfsView)
                 .WithName("DfsAlgorithm");
-            GraphProcessorGroup.MapPost("/dijkstra/{start}/{target}", AlgorithmViews.DijkstraView)
+            graphProcessorGroup.MapPost("/dijkstra/{start}/{target}", AlgorithmViews.DijkstraView)
                 .WithName("DijkstaAlgorithm");
+        }
+
+        public static void ServiceEndpoits(RouteGroupBuilder serviceGroup)
+        {
+            serviceGroup.MapGet("/health", () => Results.Ok(new { Message = "Welcome to Graph processor" }));
         }
     }
 }
