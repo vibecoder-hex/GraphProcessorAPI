@@ -3,7 +3,7 @@
         <InputTypeSelectionField v-model:selectedInputType="selectedInputType" :graphInputTypes="graphInputTypes"/>
         <br><br>
         <div v-if="selectedInputType === graphInputTypes.inputFields">
-           <UserInputVertexField/>
+           <UserInputVertexField v-model:distanceJSONString="distanceJSONString"/>
         </div>
         <div v-else-if="selectedInputType === graphInputTypes.jsonFile">
             <JsonFileVertexField v-model:distanceJSONString="distanceJSONString"/>
@@ -34,8 +34,7 @@
     import UserInputVertexField from './form_components/GDIF_components/fields/UserInputVertexField.vue'
     import JsonFileVertexField from './form_components/GDIF_components/fields/JsonFileVertexField.vue'
     import AlgorithmSelectionField from './form_components/GDIF_components/fields/AlgorithmSelectionField.vue'
-    import DistanceProcessingResult
-      from "@/forms/form_components/GDIF_components/submit_results/DistanceProcessingResult.vue";
+    import DistanceProcessingResult from "./form_components/GDIF_components/submit_results/DistanceProcessingResult.vue";
     
     const APIURL = "http://localhost:5170/api/graph_processor"
 
@@ -56,10 +55,6 @@
     
     
     async function getPathFromAPI() {
-        if (!startVertex.value || !targetVertex) {
-            errorMessage.value = "Vertex fields is empty"
-            return
-        }
         const algorithmUrlPaths = {
             dfs: `${APIURL}/${selectedAlgorithm.value}/${startVertex.value}`,
             bfs: `${APIURL}/${selectedAlgorithm.value}/${startVertex.value}/${targetVertex.value}`,
