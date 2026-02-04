@@ -21,8 +21,8 @@
 
 <style scoped>
     #network-container {
-        height: 720px;
-        width: 1200px;
+        height: 489px;
+        width: 720px;
 
         border: 1px solid red
     }
