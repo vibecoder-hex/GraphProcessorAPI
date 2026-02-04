@@ -12,7 +12,7 @@
 
 <script setup>
     import { ref, defineModel } from 'vue'
-    import { GraphStructureGenerator } from '../../../utils/graphJsonTransposer.js'
+    import { GraphStructureGenerator } from '../../../../utils/graphJsonTransposer.js'
 
     const edgeObjects = ref([])
     const distanceJSONString = defineModel('distanceJSONString')

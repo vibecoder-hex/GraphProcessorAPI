@@ -12,6 +12,7 @@
         <textarea v-model="distanceJSONString" rows="15" cols="30"></textarea>
         <br><br>
         <div v-if="distanceJSONString">
+            <GraphCanvasVisualisation :distanceJSONString="distanceJSONString"/>
             <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
                                      v-model:startVertex="startVertex"
                                      v-model:targetVertex="targetVertex"
@@ -35,6 +36,7 @@
     import JsonFileVertexField from './form_components/GDIF_components/fields/JsonFileVertexField.vue'
     import AlgorithmSelectionField from './form_components/GDIF_components/fields/AlgorithmSelectionField.vue'
     import DistanceProcessingResult from "./form_components/GDIF_components/submit_results/DistanceProcessingResult.vue";
+    import GraphCanvasVisualisation from '@/visualizations/GraphCanvasVisualisation.vue'
     
     const APIURL = "http://localhost:5170/api/graph_processor"
 
