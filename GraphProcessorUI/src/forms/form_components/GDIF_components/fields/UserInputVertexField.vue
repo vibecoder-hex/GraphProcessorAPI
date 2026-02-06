@@ -1,48 +1,72 @@
 <template>
-    <button @click="addEdge()">Add edge</button>
-    <button @click="removeEdge()">Remove edge</button>
-    <div v-for="(item, index) of edgeObjects">
-        <span>Edge {{ index + 1 }}</span>
-        <input v-model="item.X" placeholder="X vertex" type="text" required>
-        <input v-model="item.Y" placeholder="Y vertex" type="text" required>
-        <input v-model="item.Distance" placeholder="Distance" type="number" value="0" required>
+    <div>
+        <p>Enter Nodes</p>
+        <label>Node name:</label>
+        <input v-model="nodeNameValue" type="text"><br><br>
+        <button @click="NodeMethods.addNode()">Add Node</button> <button @click="NodeMethods.deleteNode()" >Delete node</button>
     </div>
-    <button @click="generateGraphStructure()" >Generate graph structure</button>
+    <br>
+    <div>
+        <p>Enter Edges</p>
+        <label>From: </label>
+        <input v-model="fromNodeValue" type="text">
+        <label>To: </label>
+        <input v-model="toNodeValue" type="text">
+        <label>Distance</label>
+        <input v-model="distanceNumber" type="number"><br><br>
+        <button @click="EdgeMethods.addEdge()">Add path</button> <button @click="EdgeMethods.deleteEdge()">Delete path</button>
+    </div>
+    <button @click="printDataValue()">OK</button>
 </template>
-
+ 
 <script setup>
-    import { ref, defineModel } from 'vue'
-    import { GraphStructureGenerator } from '../../../../utils/graphJsonTransposer.js'
+    import { defineModel, ref } from 'vue';
 
-    const edgeObjects = ref([])
-    const distanceJSONString = defineModel('distanceJSONString')
-    
-    const isValidEdgeInput = (element) => (element.X && element.Y && element.Distance !== "")
-    
-    const addEdge = () => edgeObjects.value.push({X: '', Y: '', Distance: ''})
-    
-    function removeEdge() {
-        if (edgeObjects.value.length > 1) {
-            edgeObjects.value.splice(edgeObjects.value.length - 1, 1)
-        }
+    const distanceMap = defineModel("distanceMap");
+    const nodeNameValue = ref("")
+    const fromNodeValue = ref("")
+    const toNodeValue = ref("")
+    const distanceNumber = ref(0)
+
+    function printDataValue() {
+        const distanceObject = {}
+        distanceMap.value.forEach((neighbors, node) => {
+            distanceObject[node] = Object.fromEntries(neighbors)
+        })
+        console.log(distanceObject)
     }
-    
-    function generateGraphStructure() {
-        const graph = new GraphStructureGenerator()
-        for (let element of edgeObjects.value) {
-            if (isValidEdgeInput(element)) {
-                graph.addVertex(element.X)
-                graph.addEdge(element.X, element.Y, element.Distance)
+
+    class NodeMethods {
+        static addNode() {
+            if (!distanceMap.value.has(nodeNameValue.value)) {
+                distanceMap.value.set(nodeNameValue.value, new Map())
             } else {
-                alert("all fields must be filled")
-                return 
+                alert("Incorrect node name value")
             }
         }
-        distanceJSONString.value = JSON.stringify(graph.getObject(), null, 4)
+        static deleteNode() {
+            if (distanceMap.value.has(nodeNameValue.value)) {
+                distanceMap.value.delete(nodeNameValue.value)
+            } else {
+                alert("Incorrect node name value")
+            }
+        }
+    }
+
+    class EdgeMethods {
+        static addEdge() {
+            distanceMap.value
+                .get(fromNodeValue.value)
+                .set(toNodeValue.value, distanceNumber.value)
+        }
+        static deleteEdge() {
+            distanceMap.value
+                    .get(fromNodeValue.value)
+                    .delete(toNodeValue.value)
+        }
     }
     
-    
-    
+
 </script>
 
 <style scoped></style>
