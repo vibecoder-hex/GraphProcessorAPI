@@ -16,37 +16,41 @@
         <input v-model="distanceNumber" type="number"><br><br>
         <button @click="EdgeMethods.addEdge()">Add path</button> <button @click="EdgeMethods.deleteEdge()">Delete path</button>
     </div>
-    <button @click="printDataValue()">OK</button>
+    <div v-if="distanceMap.size > 0">
+        <NetworkVisualizationCanvas :visNodes="visNodes" :visEdges="visEdges"/>
+    </div>
 </template>
  
 <script setup>
     import { defineModel, ref } from 'vue';
+    import { DataSet } from "vis-network/standalone"
+    import { NetworkCanvasProcessor } from "@/utils/networkCanvasProcessor.js";
+    import NetworkVisualizationCanvas from "@/graph_view/NetworkVisualisationCanvas.vue";
 
     const distanceMap = defineModel("distanceMap");
+    
     const nodeNameValue = ref("")
     const fromNodeValue = ref("")
     const toNodeValue = ref("")
     const distanceNumber = ref(0)
-
-    function printDataValue() {
-        const distanceObject = {}
-        distanceMap.value.forEach((neighbors, node) => {
-            distanceObject[node] = Object.fromEntries(neighbors)
-        })
-        console.log(distanceObject)
-    }
-
+    
+    const visNodes = new DataSet()
+    const visEdges = new DataSet()
+    
+    
     class NodeMethods {
         static addNode() {
             if (!distanceMap.value.has(nodeNameValue.value)) {
                 distanceMap.value.set(nodeNameValue.value, new Map())
+                NetworkCanvasProcessor.AddVisNode(nodeNameValue.value, nodeNameValue.value, visNodes)
             } else {
                 alert("Incorrect node name value")
             }
         }
         static deleteNode() {
-            if (distanceMap.value.has(nodeNameValue.value)) {
+            if (distanceMap.value.has(nodeNameValue.value) && distanceMap.value.has(toNodeValue.value)) {
                 distanceMap.value.delete(nodeNameValue.value)
+                NetworkCanvasProcessor.RemoveVisNode(nodeNameValue.value, nodeNameValue.value, visNodes)
             } else {
                 alert("Incorrect node name value")
             }
@@ -55,14 +59,22 @@
 
     class EdgeMethods {
         static addEdge() {
-            distanceMap.value
-                .get(fromNodeValue.value)
-                .set(toNodeValue.value, distanceNumber.value)
+            const fromNode = distanceMap.value.get(fromNodeValue.value)
+            if (!fromNode.has(toNodeValue.value) && distanceMap.value.has(toNodeValue.value)) {
+                fromNode.set(toNodeValue.value, distanceNumber.value)
+                NetworkCanvasProcessor.AddVisEdge(fromNodeValue.value, toNodeValue.value, visEdges)
+            } else {
+                alert("Incorrect edge name value")
+            }
         }
         static deleteEdge() {
-            distanceMap.value
-                    .get(fromNodeValue.value)
-                    .delete(toNodeValue.value)
+            const fromNode = distanceMap.value.get(fromNodeValue.value)
+            if (fromNode.has(toNodeValue.value) && fromNode) {
+                fromNode.delete(toNodeValue.value)
+                NetworkCanvasProcessor.RemoveVisEdge(fromNodeValue.value, toNodeValue.value, visEdges)
+            } else {
+                alert("Incorrect edge name value")
+            }
         }
     }
     

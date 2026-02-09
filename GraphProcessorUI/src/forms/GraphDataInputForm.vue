@@ -11,7 +11,7 @@
 -->
 <!-- ЗАДАЧИ:
     1. Разделить на 2 отдельных компонента EdgesInputField и VertexInputField +
-    2. Реализовать операции (add del upd) в структуре графа, синхронизировав DataSet с +-
+    2. Реализовать операции (add del upd) в структуре графа, синхронизировав DataSet с +
     объектом
     (Возможно изменить глобальную переменную distanceJSONObject на Map(хештаблицу),
     во избежания лишних вычислений при регенерации и увеличении скорости вставки/удаления)
@@ -19,52 +19,37 @@
 -->
 <template>
     <form @submit.prevent>
-        <InputTypeSelectionField v-model:selectedInputType="selectedInputType" :graphInputTypes="graphInputTypes"/>
+        <UserInputVertexField v-model:distanceMap="distanceMap"/>
         <br><br>
-        <div v-if="selectedInputType === graphInputTypes.inputFields">
-            <UserInputVertexField v-model:distanceMap="distanceMap"/>
-        </div>
-        <!-- <div v-else-if="selectedInputType === graphInputTypes.jsonFile">
-            <JsonFileVertexField v-model:distanceJSONString="distanceJSONString"/>
-        </div> -->
-        <p>Or enter JSON string in text area</p>
-        <!-- <textarea v-model="distanceJSONString" rows="15" cols="30"></textarea> !!Заморозить до выполнения задач 1-2
-        <br><br>
-        <div v-if="distanceJSONString">
-            <GraphCanvasVisualisation :distanceJSONString="distanceJSONString"/>
-            <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
+        <div v-if="distanceMap.size > 0">
+            <pre><code>
+                {{ JSON.stringify(getObjectFromMap(), null, 2) }}
+            </code></pre>
+           <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
                                      v-model:startVertex="startVertex"
                                      v-model:targetVertex="targetVertex"
             />
             <br>
             <button @click="getPathFromAPI()">Send path</button>
-        </div> -->
+            <div v-if="graphProcessingResult">
+                <DistanceProcessingResult :graphProcessingResult="graphProcessingResult"/>
+            </div>
+            <br>
+            <div>{{ errorMessage }}</div>
+            <button @click="clearValues()">clear</button>
+        </div>
     </form>
-    <div v-if="graphProcessingResult">
-        <DistanceProcessingResult :graphProcessingResult="graphProcessingResult"/>
-    </div>
-    <br>
-    <div>{{ errorMessage }}</div>
 </template>
 
 <script setup>
     import { ref } from 'vue'
     import axios from 'axios'
-    import InputTypeSelectionField from './form_components/GDIF_components/fields/InputTypeSelectionField.vue'
     import UserInputVertexField from './form_components/GDIF_components/fields/UserInputVertexField.vue'
-    import JsonFileVertexField from './form_components/GDIF_components/fields/JsonFileVertexField.vue'
     import AlgorithmSelectionField from './form_components/GDIF_components/fields/AlgorithmSelectionField.vue'
     import DistanceProcessingResult from "./form_components/GDIF_components/submit_results/DistanceProcessingResult.vue";
     
     const APIURL = "http://localhost:5170/api/graph_processor"
 
-    const graphInputTypes = {
-        jsonFile: "Get graph structure by JSON",
-        inputFields: "Get graph structure by input fields"
-    }
-    
-    const selectedInputType = ref("")
-    
     const selectedAlgorithm = ref("")
     const startVertex = ref("")
     const targetVertex = ref("")
@@ -72,6 +57,15 @@
     const distanceMap = ref(new Map())
     const graphProcessingResult = ref(null)
     const errorMessage = ref("")
+
+    function getObjectFromMap() {
+        const distanceObject = {}
+        distanceObject.Distances = {}
+        distanceMap.value.forEach((neighbors, node) => {
+            distanceObject.Distances[node] = Object.fromEntries(neighbors)
+        })
+        return distanceObject
+    }
     
     
     async function getPathFromAPI() {
@@ -82,7 +76,7 @@
         }
         const selectedUrl = algorithmUrlPaths[selectedAlgorithm.value]
         try {
-            const distanceJSONObject = JSON.parse(distanceJSONString.value)
+            const distanceJSONObject = getObjectFromMap()
             const response = await axios.post(selectedUrl, distanceJSONObject)
             graphProcessingResult.value = response.data
             errorMessage.value = ""
@@ -90,6 +84,13 @@
             errorMessage.value = `Error: ${error}`
             graphProcessingResult.value = ""
         }
+    }
+    function clearValues() {
+        graphProcessingResult.value = null
+        errorMessage.value = ""
+        graphProcessingResult.value = null
+        distanceMap.value.clear()
+        selectedAlgorithm.value = ""
     }
 </script>
 
