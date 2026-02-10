@@ -22,7 +22,9 @@
         <UserInputVertexField v-model:distanceMap="distanceMap"/>
         <br><br>
         <div v-if="distanceMap.size > 0">
-            <pre><code>
+            <label>Show graph structure</label>
+            <input type="checkbox" v-model="showGraphStructure"><br><br>
+            <pre v-if="showGraphStructure"><code>
                 {{ JSON.stringify(getObjectFromMap(), null, 2) }}
             </code></pre>
            <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
@@ -36,7 +38,6 @@
             </div>
             <br>
             <div>{{ errorMessage }}</div>
-            <button @click="clearValues()">clear</button>
         </div>
     </form>
 </template>
@@ -53,6 +54,8 @@
     const selectedAlgorithm = ref("")
     const startVertex = ref("")
     const targetVertex = ref("")
+
+    const showGraphStructure = ref(false)
     
     const distanceMap = ref(new Map())
     const graphProcessingResult = ref(null)
@@ -84,13 +87,6 @@
             errorMessage.value = `Error: ${error}`
             graphProcessingResult.value = ""
         }
-    }
-    function clearValues() {
-        graphProcessingResult.value = null
-        errorMessage.value = ""
-        graphProcessingResult.value = null
-        distanceMap.value.clear()
-        selectedAlgorithm.value = ""
     }
 </script>
 
