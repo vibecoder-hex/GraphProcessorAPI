@@ -1,11 +1,3 @@
-<script setup>
-    import { defineModel } from 'vue'
-    
-    const selectedAlgorithmModel = defineModel('selectedAlgorithm')
-    const startVertexModel = defineModel('startVertex')
-    const targetVertexModel = defineModel('targetVertex')
-</script>
-
 <template>
     <label for="algorithm">Select algorithm:</label>
     <select v-model="selectedAlgorithmModel">
@@ -22,5 +14,12 @@
         <input v-model="startVertexModel" type="text" placeholder="Enter start vertex">
     </div>
 </template>
+
+<script setup lang="ts">
+    const selectedAlgorithmModel = defineModel<string>('selectedAlgorithm')
+    const startVertexModel = defineModel<string>('startVertex')
+    const targetVertexModel = defineModel<string>('targetVertex')
+</script>
+
 
 <style scoped></style>
