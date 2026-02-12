@@ -48,7 +48,7 @@ namespace Src.Views
                 StartVertex = start,
                 TargetVertex = target,
                 ShortestPath = bfsPath,
-                TimeNs = stopwatch.Elapsed.Nanoseconds, 
+                TimeNs = (long)stopwatch.Elapsed.TotalNanoseconds, 
             };
             
             return Results.Ok(new { Result = result });
@@ -73,7 +73,7 @@ namespace Src.Views
                 StartVertex = start,
                 TargetVertex = target,
                 ShortestPath = dijkstraPath,
-                TimeNs = stopwatch.Elapsed.Nanoseconds,
+                TimeNs = (long)stopwatch.Elapsed.TotalNanoseconds,
                 TotalDistance = 0, // Placeholder for total distance
             };
 
@@ -98,7 +98,7 @@ namespace Src.Views
                 Algorithm = "DFS",
                 StartVertex = start,
                 ShortestPath = dfsPath,
-                TimeNs = stopwatch.Elapsed.Nanoseconds,
+                TimeNs = (long)stopwatch.Elapsed.TotalNanoseconds,
             };
             return Results.Ok(new { Result = result });
         }
