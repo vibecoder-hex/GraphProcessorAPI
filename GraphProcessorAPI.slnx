@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="GraphProcessorAPI/GraphProcessorAPI.csproj" />
+  <Project Path="GraphProcessorTest/GraphProcessorTest.csproj" />
 </Solution>
