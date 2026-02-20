@@ -44,3 +44,79 @@
 
 Как основа для более сложных алгоритмов (например, A* с эвристикой).
 
+
+```
+GraphProcessorAPI
+├─ .dockerignore
+├─ .DS_Store
+├─ .idea
+│  └─ .idea.GraphProcessorAPI
+│     └─ .idea
+│        ├─ codeStyles
+│        │  └─ codeStyleConfig.xml
+│        ├─ encodings.xml
+│        ├─ indexLayout.xml
+│        └─ vcs.xml
+├─ GraphProcessor.sql
+├─ GraphProcessorAPI
+│  ├─ .DS_Store
+│  ├─ appsettings.Development.json
+│  ├─ appsettings.json
+│  ├─ Dockerfile
+│  ├─ GraphProcessorAPI.csproj
+│  ├─ Program.cs
+│  ├─ Properties
+│  │  └─ launchSettings.json
+│  └─ src
+│     ├─ ApiEndpointsProcessor.cs
+│     ├─ DTOs.cs
+│     ├─ GraphProcessor.cs
+│     └─ Views.cs
+├─ GraphProcessorAPI.slnx
+├─ GraphProcessordiagram.png
+├─ GraphProcessorFrontend
+│  ├─ dist
+│  │  ├─ assets
+│  │  │  ├─ index-2tQpaWhK.css
+│  │  │  └─ index-xyfuJH-U.js
+│  │  ├─ favicon.ico
+│  │  └─ index.html
+│  ├─ env.d.ts
+│  ├─ index.html
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ public
+│  │  └─ favicon.ico
+│  ├─ README.md
+│  ├─ src
+│  │  ├─ App.vue
+│  │  ├─ components
+│  │  │  ├─ forms
+│  │  │  │  ├─ form_components
+│  │  │  │  │  └─ GDIF_components
+│  │  │  │  │     ├─ fields
+│  │  │  │  │     │  ├─ AlgorithmSelectionField.vue
+│  │  │  │  │     │  └─ UserInputVertexField.vue
+│  │  │  │  │     └─ submit_results
+│  │  │  │  │        └─ DistanceProcessingResult.vue
+│  │  │  │  └─ GraphDataInputForm.vue
+│  │  │  └─ graph_view
+│  │  │     └─ NetworkVisualisationCanvas.vue
+│  │  ├─ main.ts
+│  │  ├─ router
+│  │  │  └─ index.ts
+│  │  ├─ utils
+│  │  │  ├─ interfaces.ts
+│  │  │  └─ services
+│  │  │     ├─ graphOperationsService.ts
+│  │  │     └─ networkCanvasService.ts
+│  │  └─ views
+│  │     ├─ AboutPageView.vue
+│  │     └─ GraphDataInputView.vue
+│  ├─ tsconfig.app.json
+│  ├─ tsconfig.json
+│  ├─ tsconfig.node.json
+│  └─ vite.config.ts
+└─ README.md
+
+```
