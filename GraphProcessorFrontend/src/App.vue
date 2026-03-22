@@ -1,10 +1,9 @@
 <template>
-    <h1>GraphProcessor</h1>
-    <nav>
-        <RouterLink to="/">Home</RouterLink>
+    <nav class="p-5">
+        <RouterLink to="/" class="text-2xl mr-4">GraphProcessor</RouterLink>
         <RouterLink to="/about">About</RouterLink>
     </nav>
-    <main>
+    <main class="mx-auto max-w-6xl pt-20">
         <RouterView />
     </main>
 </template>

@@ -1,24 +1,27 @@
 <template>
-    <div>
-        <p>Enter Nodes</p>
-        <label>Node name:</label>
-        <input v-model="nodeNameValue" type="text"><br><br>
-        <button @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button @click="NodeMethods.deleteNode(nodeNameValue, toNodeValue, distanceMap, visNodes)" >Delete node</button>
+    <div class="grid lg:grid-cols-3 lg:grid-rows-2 sm:grid-cols-1 grid-rows-1">
+        <div>
+            <p>Enter Nodes</p>
+            <label>Node name:</label>
+            <input v-model="nodeNameValue" type="text"><br><br>
+            <button @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button @click="NodeMethods.deleteNode(nodeNameValue, toNodeValue, distanceMap, visNodes)" >Delete node</button>
+        </div>
+        <br>
+        <div>
+            <p>Enter Edges</p>
+            <label>From: </label>
+            <input v-model="fromNodeValue" type="text">
+            <label>To: </label>
+            <input v-model="toNodeValue" type="text">
+            <label>Distance</label>
+            <input v-model="distanceNumber" type="number"><br><br>
+            <button @click="EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges)">Add path</button> <button @click="EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges)">Delete path</button>
+        </div>
+        <div v-if="distanceMap.size > 0">
+            <NetworkVisualizationCanvas :visNodes="visNodes" :visEdges="visEdges"/>
+        </div>
     </div>
-    <br>
-    <div>
-        <p>Enter Edges</p>
-        <label>From: </label>
-        <input v-model="fromNodeValue" type="text">
-        <label>To: </label>
-        <input v-model="toNodeValue" type="text">
-        <label>Distance</label>
-        <input v-model="distanceNumber" type="number"><br><br>
-        <button @click="EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges)">Add path</button> <button @click="EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges)">Delete path</button>
-    </div>
-    <div v-if="distanceMap.size > 0">
-        <NetworkVisualizationCanvas :visNodes="visNodes" :visEdges="visEdges"/>
-    </div>
+    
 </template>
  
 <script setup lang="ts">

@@ -1,5 +1,6 @@
 <template>
     <form @submit.prevent>
+        Please enter graph params
         <UserInputVertexField v-model:distanceMap="distanceMap"/>
         <br><br>
         <div v-if="distanceMap.size > 0">
@@ -31,7 +32,7 @@
     import DistanceProcessingResult from "./form_components/GDIF_components/submit_results/DistanceProcessingResult.vue";
     import type { IDistanceProcessingRootObject, IDistanceRootObject } from "../../utils/interfaces.ts"
     
-    const APIURL: string = "http://localhost:5170/api/graph_processor"
+    const APIURL: string = "/api/graph_processor"
 
     type Algorithm = "bfs" | "dfs" | "dijkstra"
     const selectedAlgorithm = ref<Algorithm>("dijkstra")

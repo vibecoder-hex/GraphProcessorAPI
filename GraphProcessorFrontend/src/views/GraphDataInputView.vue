@@ -1,5 +1,4 @@
 <template>
-    <h3>Please enter graph params</h3>
     <GraphDataInputForm />
 </template>
 

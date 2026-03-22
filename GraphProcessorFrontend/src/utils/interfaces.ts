@@ -1,5 +1,3 @@
-import type { DataSet, Edge, Node } from "vis-network/standalone"
-
 export type jsonResponseDataTypes = string | number | boolean | string[] | number[] | boolean[] | undefined | null
 
 export interface IDistanceProcessingResultObject {

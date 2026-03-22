@@ -1,19 +1,6 @@
-using Src.ApiEndpointsProcessor;
+using Src.Views;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                        policy =>
-                        {
-                            policy.WithOrigins("http://localhost:5173")
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                        });
-});
 
 builder.Services.AddHttpLogging(logging => { });
 
@@ -23,8 +10,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
-
-app.UseCors(MyAllowSpecificOrigins);
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -39,7 +24,16 @@ app.UseHttpLogging();
 if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler();
 
-EndpointsProcessor.GraphProcessorEndpoints(app.MapGroup("/api/graph_processor"));
-EndpointsProcessor.ServiceEndpoits(app.MapGroup("/api/service"));
+var graphProcessorGroup = app.MapGroup("/api/graph_processor");
+graphProcessorGroup.MapPost("/bfs/{start}/{target}", AlgorithmViews.BfsView)
+    .WithName("BfsAlgorithm");
+graphProcessorGroup.MapPost("/dfs/{start}", AlgorithmViews.DfsView)
+    .WithName("DfsAlgorithm");
+graphProcessorGroup.MapPost("/dijkstra/{start}/{target}", AlgorithmViews.DijkstraView)
+    .WithName("DijkstaAlgorithm");
+
+
+var serviceGroup = app.MapGroup("/api/service");
+serviceGroup.MapGet("/health", () => Results.Ok(new { Message = "Welcome to Graph processor" }));
 
 app.Run();
