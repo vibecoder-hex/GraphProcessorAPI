@@ -1,10 +1,10 @@
 <template>
     <nav class="navbar" role="navigation">
-        <RouterLink to="/">GraphProcessor</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink class="navbar-item is-size-3" to="/">GraphProcessor</RouterLink>
+        <RouterLink class="navbar-item" to="/about">About</RouterLink>
     </nav>
     <main>
-        <RouterView />
+        <RouterView/>
     </main>
 </template>
 

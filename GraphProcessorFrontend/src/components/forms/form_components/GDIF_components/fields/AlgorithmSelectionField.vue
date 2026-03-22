@@ -1,18 +1,23 @@
 <template>
     <label for="algorithm">Select algorithm:</label>
-    <select v-model="selectedAlgorithmModel">
-        <option disabled value="">Select algorithm</option>
-        <option>dfs</option>
-        <option>bfs</option>
-        <option>dijkstra</option>
-    </select>
-    <div v-if="selectedAlgorithmModel === 'bfs' || selectedAlgorithmModel === 'dijkstra'" >
-        <input v-model="startVertexModel" type="text" placeholder="Enter start vertex" required>
-        <input v-model="targetVertexModel" type="text" placeholder="Enter target vertex" required>
-    </div>
-    <div v-else-if="selectedAlgorithmModel === 'dfs'">
-        <input v-model="startVertexModel" type="text" placeholder="Enter start vertex">
-    </div>
+      <div class="control">
+          <div class="select"> 
+            <select v-model="selectedAlgorithmModel">
+              <option disabled value="">Select algorithm</option>
+              <option value="dfs">DFS (в глубину)</option>
+              <option value="bfs">BFS (в ширину)</option>
+              <option value="dijkstra">Dijkstra</option>
+            </select>
+          </div>
+      </div>
+      <div v-if="selectedAlgorithmModel === 'bfs' || selectedAlgorithmModel === 'dijkstra'" class="shortest-path-fields">
+          <input class="input" v-model="startVertexModel" type="text" placeholder="Enter start vertex" required>
+          <input class="input" v-model="targetVertexModel" type="text" placeholder="Enter target vertex" required>
+      </div>
+      <div v-else-if="selectedAlgorithmModel === 'dfs'">
+          <input class="input" v-model="startVertexModel" type="text" placeholder="Enter start vertex">
+      </div>
+
 </template>
 
 <script setup lang="ts">
@@ -22,4 +27,12 @@
 </script>
 
 
-<style scoped></style>
+<style scoped>
+    @media(min-width: 1000px){
+        .shortest-path-fields {
+            display: flex;
+            flex-direction: row;
+        }
+    }
+
+</style>

@@ -1,25 +1,33 @@
 <template>
     <div class="user-input">
-        <div class="node-input">
-            <p>Enter Nodes</p>
-            <label>Node name:</label>
-            <input v-model="nodeNameValue" type="text"><br><br>
-            <button @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button @click="NodeMethods.deleteNode(nodeNameValue, toNodeValue, distanceMap, visNodes)" >Delete node</button>
+        <div class="node-input card">
+            <div class="card-content">
+                <div class="content">
+                </div>
+                    <p class="is-size-5">Enter Nodes</p>
+                    <label class="label">Node name:</label>
+                    <input class="input" v-model="nodeNameValue" type="text"><br><br>
+                    <button class="button" @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button class="button" @click="NodeMethods.deleteNode(nodeNameValue, toNodeValue, distanceMap, visNodes)" >Delete node</button>
+                </div>
         </div>
         <br>
-        <div class="edge-input">
-            <p>Enter Edges</p>
-            <label>From: </label>
-            <input v-model="fromNodeValue" type="text">
-            <label>To: </label>
-            <input v-model="toNodeValue" type="text">
-            <label>Distance</label>
-            <input v-model="distanceNumber" type="number"><br><br>
-            <button @click="EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges)">Add path</button> <button @click="EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges)">Delete path</button>
+        <div class="edge-input card">
+            <div class="card-content">
+                <div class="content">
+                    <p class="is-size-5">Enter Edges</p>
+                    <label>From: </label>
+                    <input class="input" v-model="fromNodeValue" type="text">
+                    <label>To: </label>
+                    <input class="input" v-model="toNodeValue" type="text">
+                    <label>Distance</label>
+                    <input class="input" v-model="distanceNumber" type="number"><br><br>
+                    <button class="button" @click="EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges)">Add path</button> <button class="button" @click="EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges)">Delete path</button>
+                </div>
+            </div>
         </div>
     </div>
     <div v-if="distanceMap.size > 0">
-        <label>Show graph canvas</label>
+        <label>Show graph canvas</label> 
         <input type="checkbox" v-model="showCanvas">
         <NetworkVisualizationCanvas v-if="showCanvas" :visNodes="visNodes" :visEdges="visEdges"/>
     </div>
@@ -52,12 +60,15 @@
         .user-input {
             display: flex;
             flex-direction: row;
-            gap: 50px;
+            gap: 20px;
             margin-top: 20px;
         }
+      .card {
+          flex: 1;
+      }
     }
     @media (max-width: 640px) {
-        .edge-input, .node-input{
+        .user-input{
             display: flex;
             flex-direction: column;
         }

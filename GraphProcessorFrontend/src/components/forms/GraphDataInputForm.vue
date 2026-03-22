@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent>
-        Please enter graph params
+        <p class="is-size-5">Please enter graph params</p>
         <UserInputVertexField v-model:distanceMap="distanceMap"/>
         <br><br>
         <div v-if="distanceMap.size > 0">
@@ -15,7 +15,7 @@
                                      v-model:targetVertex="targetVertex"
             />
             <br>
-            <button @click="getPathFromAPI()">Send path</button>
+            <button class="button is-primary" @click="getPathFromAPI()">Send path</button>
             <div v-if="graphProcessingResult">
                 <DistanceProcessingResult :result="graphProcessingResult.result"/>
             </div>
