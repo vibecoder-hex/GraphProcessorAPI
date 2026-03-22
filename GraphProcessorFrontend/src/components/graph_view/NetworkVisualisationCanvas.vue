@@ -20,6 +20,8 @@
     onMounted(() => {
         if (networkContainer.value) {
             network = NetworkCanvasProcessor.DrawVis(networkContainer.value, props.visNodes, props.visEdges)
+            network.setSize(networkContainer.value.offsetWidth.toString(), networkContainer.value.offsetHeight.toString());
+            network.fit();
         }
         
     })
@@ -32,10 +34,10 @@
 </script>
 
 <style scoped>
-    #network-container {
-        width: 600px;
-        height: 300px;
-        border: 1px solid black;
-        margin: 0 auto;
-    }
+  #network-container {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    border: 1px solid black;
+  }
 </style>

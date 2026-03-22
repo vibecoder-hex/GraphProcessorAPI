@@ -1,13 +1,13 @@
 <template>
-    <div class="grid lg:grid-cols-3 lg:grid-rows-2 sm:grid-cols-1 grid-rows-1">
-        <div>
+    <div class="user-input">
+        <div class="node-input">
             <p>Enter Nodes</p>
             <label>Node name:</label>
             <input v-model="nodeNameValue" type="text"><br><br>
             <button @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button @click="NodeMethods.deleteNode(nodeNameValue, toNodeValue, distanceMap, visNodes)" >Delete node</button>
         </div>
         <br>
-        <div>
+        <div class="edge-input">
             <p>Enter Edges</p>
             <label>From: </label>
             <input v-model="fromNodeValue" type="text">
@@ -17,9 +17,11 @@
             <input v-model="distanceNumber" type="number"><br><br>
             <button @click="EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges)">Add path</button> <button @click="EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges)">Delete path</button>
         </div>
-        <div v-if="distanceMap.size > 0">
-            <NetworkVisualizationCanvas :visNodes="visNodes" :visEdges="visEdges"/>
-        </div>
+    </div>
+    <div v-if="distanceMap.size > 0">
+        <label>Show graph canvas</label>
+        <input type="checkbox" v-model="showCanvas">
+        <NetworkVisualizationCanvas v-if="showCanvas" :visNodes="visNodes" :visEdges="visEdges"/>
     </div>
     
 </template>
@@ -40,7 +42,24 @@
     const visNodes = new DataSet<Node>()
     const visEdges = new DataSet<Edge>()
     
+    const showCanvas = ref<boolean>(false);
+    
 
 </script>
 
-<style scoped></style>
+<style scoped>
+    @media (min-width: 1000px) {
+        .user-input {
+            display: flex;
+            flex-direction: row;
+            gap: 50px;
+            margin-top: 20px;
+        }
+    }
+    @media (max-width: 640px) {
+        .edge-input, .node-input{
+            display: flex;
+            flex-direction: column;
+        }
+    }
+</style>

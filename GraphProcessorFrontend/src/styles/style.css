@@ -1,0 +1,10 @@
+@import 'bulma/css/bulma.css';
+
+main {
+    margin: 0 auto;
+    max-width: 1200px;
+    padding-top: 50px;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+}

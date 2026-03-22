@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@tailwindcss/cli": "^4.2.2",
     "@types/vis": "^4.21.27",
     "axios": "^1.13.5",
     "vis-network": "^10.0.2",

@@ -20,7 +20,11 @@ export class NetworkCanvasProcessor {
             edges.remove(edgeToDelete)
         }
     }
-    static DrawVis(container: HTMLElement, nodes: DataSet<Node>, edges: DataSet<Edge>, options: Options = {}) {
+    static DrawVis(container: HTMLElement, nodes: DataSet<Node>, edges: DataSet<Edge>, options: Options = {
+        height: '100%', 
+        width: '100%', 
+        autoResize: true
+    }) {
         const data: Data = {
             nodes: nodes,
             edges: edges

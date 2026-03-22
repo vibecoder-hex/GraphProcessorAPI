@@ -1,9 +1,9 @@
 <template>
-    <nav class="p-5">
-        <RouterLink to="/" class="text-2xl mr-4">GraphProcessor</RouterLink>
+    <nav class="navbar" role="navigation">
+        <RouterLink to="/">GraphProcessor</RouterLink>
         <RouterLink to="/about">About</RouterLink>
     </nav>
-    <main class="mx-auto max-w-6xl pt-20">
+    <main>
         <RouterView />
     </main>
 </template>
@@ -13,4 +13,9 @@
 </script>
 
 
-<style scoped></style>
+<style scoped>
+  nav a {
+      margin: 10px;
+  }
+
+</style>

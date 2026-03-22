@@ -8,6 +8,7 @@
             <input type="checkbox" v-model="showGraphStructure"><br><br>
             <pre v-if="showGraphStructure"><code>
                 {{ JSON.stringify(getObjectFromMap(), null, 2) }}
+                <button @click="downloadGraphStructure(getObjectFromMap())" >Download graph structure</button>
             </code></pre>
            <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
                                      v-model:startVertex="startVertex"
@@ -52,6 +53,18 @@
             distanceObject.Distances[node] = Object.fromEntries(neighbors)
         })
         return distanceObject
+    }
+    
+    function downloadGraphStructure(distanceObject: IDistanceRootObject) {
+        const link: HTMLAnchorElement = document.createElement('a');
+        const distanceString: string = JSON.stringify(distanceObject, null, 4);
+        const blob: Blob = new Blob([distanceString], { type: "application/json" });
+        
+        link.download = 'graph_structure.json';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        
+        URL.revokeObjectURL(link.href);
     }
     
     function getSelectedUrl(): string {
