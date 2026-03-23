@@ -2,24 +2,24 @@
     <form @submit.prevent>
         <p class="is-size-5">Please enter graph params</p>
         <UserInputVertexField v-model:distanceMap="distanceMap"/>
-        <br><br>
         <div v-if="distanceMap.size > 0">
             <label>Show graph structure</label>
             <input type="checkbox" v-model="showGraphStructure"><br><br>
-            <pre v-if="showGraphStructure"><code>
-                {{ JSON.stringify(getObjectFromMap(), null, 2) }}
-                <button @click="downloadGraphStructure(getObjectFromMap())" >Download graph structure</button>
-            </code></pre>
+            <div v-if="showGraphStructure">
+                <pre><code>
+                    {{ JSON.stringify(getObjectFromMap(), null, 2) }}
+                </code></pre>
+                <button class="button is-text" @click="downloadGraphStructure(getObjectFromMap())" >Download graph structure</button>
+            </div>
+
            <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
                                      v-model:startVertex="startVertex"
                                      v-model:targetVertex="targetVertex"
             />
-            <br>
             <button class="button is-primary" @click="getPathFromAPI()">Send path</button>
             <div v-if="graphProcessingResult">
                 <DistanceProcessingResult :result="graphProcessingResult.result"/>
             </div>
-            <br>
             <div>{{ errorMessage }}</div>
         </div>
     </form>
@@ -92,4 +92,5 @@
     }
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
