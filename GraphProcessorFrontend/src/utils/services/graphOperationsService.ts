@@ -28,7 +28,7 @@ export class EdgeMethods {
             const fromNode: Map<string, number> = distances.get(fromNodeKey)!
             if (!fromNode.has(toNodeKey) && distances.has(toNodeKey)) {
                 fromNode.set(toNodeKey, distNumber)
-                NetworkCanvasProcessor.AddVisEdge(fromNodeKey, toNodeKey, edges)
+                NetworkCanvasProcessor.AddVisEdge(fromNodeKey, toNodeKey, distNumber, edges)
             } else {
                 alert("Incorrect edge name value")
             }
