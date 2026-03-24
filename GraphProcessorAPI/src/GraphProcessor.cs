@@ -7,7 +7,7 @@ namespace Src.GraphProcessor
     public static class DistanceGraphProcessing 
     {
         // Reconstruct shortest path
-        private static List<string> reconstructPath(string start, string target, Dictionary<string, string> parents) 
+        private static (List<string> Path, int Dist) ReconstructPath(string start, string target, Dictionary<string, string> parents, Dictionary<string, int>? distances = null) 
         {
             List<string> output = new List<string>();
             string current = target;
@@ -18,11 +18,13 @@ namespace Src.GraphProcessor
             }
             output.Add(current);
             output.Reverse();
-            return output;
+            if (distances != null)
+                return (output, distances[target]);
+            return (output, 0);
         }
 
         // Recursive Depth fisrt search function
-        private static void dfsRecursive(Dictionary<string, Dictionary<string, int>> graph, string currentVertex, List<string> output, HashSet<string> visited)
+        private static void DfsRecursive(Dictionary<string, Dictionary<string, int>> graph, string currentVertex, List<string> output, HashSet<string> visited)
         {
             visited.Add(currentVertex);
             output.Add(currentVertex);
@@ -30,7 +32,7 @@ namespace Src.GraphProcessor
             {
                 if (!visited.Contains(neighbour.Key))
                 {
-                    dfsRecursive(graph, neighbour.Key, output, visited);
+                    DfsRecursive(graph, neighbour.Key, output, visited);
                 }
             }
         }
@@ -52,7 +54,7 @@ namespace Src.GraphProcessor
 
                 if (currentVertex == target)
                 {
-                    List<string> output = reconstructPath(start, target, parents);
+                    List<string> output = ReconstructPath(start, target, parents).Path;
                     return output;
                 }
 
@@ -74,11 +76,11 @@ namespace Src.GraphProcessor
         {
             List<string> output = new List<string>();
             HashSet<string> visited = new HashSet<string>();
-            dfsRecursive(graph, start, output, visited);
+            DfsRecursive(graph, start, output, visited);
             return output;
         }
 
-        public static List<string> DijkstraShortestPath(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
+        public static (List<string> Path, int Dist) DijkstraShortestPath(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
         {
             PriorityQueue<string, int> priorityQueue = new PriorityQueue<string, int>();
             Dictionary<string, string> parent = new Dictionary<string, string>();
@@ -103,8 +105,9 @@ namespace Src.GraphProcessor
                     }
                 }
             }
-            List<string> resultPath = reconstructPath(start, target, parent);
-            return resultPath;
+
+            (List<string> Path, int Dist) result = ReconstructPath(start, target, parent, distances);
+            return result;
         }
     }
 }

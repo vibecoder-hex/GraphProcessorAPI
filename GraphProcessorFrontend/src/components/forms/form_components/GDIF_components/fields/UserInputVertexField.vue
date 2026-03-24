@@ -7,7 +7,7 @@
                     <p class="is-size-5">Enter Nodes</p>
                     <label class="label">Node name:</label>
                     <input class="input" v-model="nodeNameValue" type="text"><br><br>
-                    <button class="button" @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button class="button" @click="NodeMethods.deleteNode(nodeNameValue, toNodeValue, distanceMap, visNodes)" >Delete node</button>
+                    <button class="button" @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button class="button" @click="NodeMethods.deleteNode(nodeNameValue, distanceMap, visNodes)" >Delete node</button>
                 </div>
         </div>
         <br>

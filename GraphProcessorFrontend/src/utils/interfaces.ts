@@ -4,7 +4,7 @@ export interface IDistanceProcessingResultObject {
     algorithm: string,
     startVertex: string,
     shortestPath: string[],
-    timeNs: number
+    timeNs: number,
     [anotherProperties: string]: jsonResponseDataTypes 
 }
 

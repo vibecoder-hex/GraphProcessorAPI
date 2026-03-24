@@ -2,9 +2,11 @@
     <form @submit.prevent>
         <p class="is-size-5">Please enter graph params</p>
         <UserInputVertexField v-model:distanceMap="distanceMap"/>
-        <div v-if="distanceMap.size > 0">
-            <label>Show graph structure</label>
-            <input type="checkbox" v-model="showGraphStructure"><br><br>
+        <div v-if="distanceMap.size > 0" class="graph-structure">
+            <div>
+                <label>Show graph structure</label>
+                <input type="checkbox" v-model="showGraphStructure">
+            </div>
             <div v-if="showGraphStructure">
                 <pre><code>
                     {{ JSON.stringify(getObjectFromMap(), null, 2) }}
@@ -93,4 +95,9 @@
 </script>
 
 <style scoped>
+    .graph-structure {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 </style>

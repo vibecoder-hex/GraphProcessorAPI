@@ -12,8 +12,8 @@ export class NodeMethods {
             alert("Incorrect node name value")
         }
     }
-    static deleteNode(nodeKey: string, toNodeKey: string, distances: DistanceMap, nodes: DataSet<Node>) {
-        if (distances.has(nodeKey) && distances.has(toNodeKey)) {
+    static deleteNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>) {
+        if (distances.has(nodeKey)) {
             distances.delete(nodeKey)
             NetworkCanvasProcessor.RemoveVisNode(nodeKey, nodeKey, nodes)
         } else {

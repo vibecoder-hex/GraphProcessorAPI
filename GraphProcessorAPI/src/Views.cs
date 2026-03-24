@@ -61,10 +61,10 @@ namespace Src.Views
             
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            List<string> dijkstraPath = DistanceGraphProcessing.DijkstraShortestPath(jsonData.Distances, start, target);
+            (List<string> Path, int Dist) dijkstraPath = DistanceGraphProcessing.DijkstraShortestPath(jsonData.Distances, start, target);
             stopwatch.Stop();
 
-            if (dijkstraPath.Count == 0)
+            if (dijkstraPath.Path.Count == 0)
                 return Results.BadRequest(new { Error = "No path found between the specified nodes." });
 
             var result = new DijkstraResultDTO
@@ -72,9 +72,9 @@ namespace Src.Views
                 Algorithm = "Dijkstra",
                 StartVertex = start,
                 TargetVertex = target,
-                ShortestPath = dijkstraPath,
+                ShortestPath = dijkstraPath.Path,
                 TimeNs = (long)stopwatch.Elapsed.TotalNanoseconds,
-                TotalDistance = 0, // Placeholder for total distance
+                TotalDistance = dijkstraPath.Dist, // Placeholder for total distance
             };
 
             return Results.Ok(new { Result = result });

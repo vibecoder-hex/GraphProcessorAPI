@@ -40,4 +40,13 @@
     min-height: 500px;
     border: 1px solid black;
   }
+  @media(max-width: 640px) {
+    #network-container {
+        width: 100%;
+        height: 100%;
+        min-height: 500px;
+        max-width: 640px;
+        border: 1px solid black;
+      }
+  }
 </style>
