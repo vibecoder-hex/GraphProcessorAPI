@@ -7,7 +7,7 @@
                     <p class="is-size-5">Enter Nodes</p>
                     <label class="label">Node name:</label>
                     <input class="input" v-model="nodeNameValue" type="text"><br><br>
-                    <button class="button" @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button class="button" @click="NodeMethods.deleteNode(nodeNameValue, toNodeValue, distanceMap, visNodes)" >Delete node</button>
+                    <button class="button" @click="NodeMethods.addNode(nodeNameValue, distanceMap, visNodes)">Add Node</button> <button class="button" @click="NodeMethods.deleteNode(nodeNameValue, distanceMap, visNodes)" >Delete node</button>
                 </div>
         </div>
         <br>
@@ -37,8 +37,8 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     import { DataSet, type Edge, type Node } from "vis-network/standalone"
-    import NetworkVisualizationCanvas from "../../../../graph_view/NetworkVisualisationCanvas.vue";
-    import { NodeMethods, EdgeMethods } from "../../../../../utils/services/graphOperationsService.ts"
+    import NetworkVisualizationCanvas from "../../../graph_view/NetworkVisualisationCanvas.vue";
+    import { NodeMethods, EdgeMethods } from "../../../../utils/services/graphOperationsService.ts"
 
     const distanceMap = defineModel<Map<string, Map<string, number>>>("distanceMap", {required: true});
     

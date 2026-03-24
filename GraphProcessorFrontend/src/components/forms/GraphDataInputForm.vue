@@ -2,9 +2,11 @@
     <form @submit.prevent>
         <p class="is-size-5">Please enter graph params</p>
         <UserInputVertexField v-model:distanceMap="distanceMap"/>
-        <div v-if="distanceMap.size > 0">
-            <label>Show graph structure</label>
-            <input type="checkbox" v-model="showGraphStructure"><br><br>
+        <div v-if="distanceMap.size > 0" class="graph-structure">
+            <div>
+                <label>Show graph structure</label>
+                <input type="checkbox" v-model="showGraphStructure">
+            </div>
             <div v-if="showGraphStructure">
                 <pre><code>
                     {{ JSON.stringify(getObjectFromMap(), null, 2) }}
@@ -28,9 +30,9 @@
 <script setup lang="ts">
     import { ref } from 'vue'
     import axios from 'axios'
-    import UserInputVertexField from './form_components/GDIF_components/fields/UserInputVertexField.vue'
-    import AlgorithmSelectionField from './form_components/GDIF_components/fields/AlgorithmSelectionField.vue'
-    import DistanceProcessingResult from "./form_components/GDIF_components/submit_results/DistanceProcessingResult.vue";
+    import UserInputVertexField from './form_components/fields/UserInputVertexField.vue'
+    import AlgorithmSelectionField from './form_components/fields/AlgorithmSelectionField.vue'
+    import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
     import type { IDistanceProcessingRootObject, IDistanceRootObject } from "../../utils/interfaces.ts"
     
     const APIURL: string = "/api/graph_processor"
@@ -93,4 +95,9 @@
 </script>
 
 <style scoped>
+    .graph-structure {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 </style>
