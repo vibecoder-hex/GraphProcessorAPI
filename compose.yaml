@@ -1,0 +1,16 @@
+﻿services:
+  graphprocessorapi:
+    image: vibecoderhex/graphprocessorapi:latest
+    build:
+      context: .
+      dockerfile: ./GraphProcessorAPI/Dockerfile
+    ports:
+      - "8080:8080"
+  
+  graphprocessorfrontend:
+    image: vibecoderhex/graphprocessorfrontend:latest
+    build:
+      context: ./GraphProcessorFrontend
+      dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
