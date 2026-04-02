@@ -10,7 +10,7 @@ export class NetworkCanvasProcessor {
     }
     
     static AddVisEdge(from: string, to: string, weight: number, edges: DataSet<Edge>) {
-        edges.add({from: from, to: to, label: weight.toString()})
+        edges.add({from: from, to: to, label: weight.toString(), arrows: "to"})
     }
     static RemoveVisEdge(from: string, to: string, edges: DataSet<Edge>) {
         const edgeToDelete: Edge | undefined = edges.get({

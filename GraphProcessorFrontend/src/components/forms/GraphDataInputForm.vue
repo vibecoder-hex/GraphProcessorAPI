@@ -88,7 +88,13 @@
             graphProcessingResult.value = response.data
             errorMessage.value = ""
         } catch(error) {
-            errorMessage.value = `Error: ${error}`
+            if (axios.isAxiosError(error)) {
+                errorMessage.value = `Error: ${error} ${error.response?.data.error}`
+            }
+            else {
+                errorMessage.value = `Error: ${error}`
+            }
+            
             graphProcessingResult.value = null
         }
     }

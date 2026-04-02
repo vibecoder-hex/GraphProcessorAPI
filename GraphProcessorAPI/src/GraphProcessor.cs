@@ -7,6 +7,7 @@ namespace Src.GraphProcessor
     public static class DistanceGraphProcessing 
     {
         // Reconstruct shortest path
+        
         private static (List<string> Path, int Dist) ReconstructPath(string start, string target, Dictionary<string, string> parents, Dictionary<string, int>? distances = null) 
         {
             List<string> output = new List<string>();
@@ -39,8 +40,9 @@ namespace Src.GraphProcessor
 
         public static List<string> BfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
         {
-            if (start == target) return new List<string>(){start};
-
+            if (start == target || !graph.ContainsKey(start) || !graph.ContainsKey(target)) 
+                return new List<string>();
+            
             Queue<string> queue = new Queue<string>();
             HashSet<string> visited = new HashSet<string>();
             Dictionary<string, string> parents = new Dictionary<string, string>();
@@ -74,6 +76,8 @@ namespace Src.GraphProcessor
 
         public static List<string> DfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start)
         {
+            if (!graph.ContainsKey(start)) return new List<string>();
+            
             List<string> output = new List<string>();
             HashSet<string> visited = new HashSet<string>();
             DfsRecursive(graph, start, output, visited);
@@ -82,6 +86,9 @@ namespace Src.GraphProcessor
 
         public static (List<string> Path, int Dist) DijkstraShortestPath(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
         {
+            if (!graph.ContainsKey(start) || !graph.ContainsKey(target) || start == target)
+                return (new List<string>(), -1);
+            
             PriorityQueue<string, int> priorityQueue = new PriorityQueue<string, int>();
             Dictionary<string, string> parent = new Dictionary<string, string>();
 

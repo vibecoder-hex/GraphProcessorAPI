@@ -38,9 +38,13 @@ namespace Src.Views
             stopwatch.Start();
             List<string> bfsPath = DistanceGraphProcessing.BfsTraversal(jsonData.Distances, start, target);
             stopwatch.Stop();
-            
+
             if (bfsPath.Count == 0)
+            {
+                logger.LogError($"BFS path from {start} to {target} vertexes not found");
                 return Results.BadRequest(new { Error = "No path found between the specified nodes." });
+            }
+                
 
             var result = new BfsResultDTO
             {
@@ -54,7 +58,7 @@ namespace Src.Views
             return Results.Ok(new { Result = result });
         }
 
-        public static IResult DijkstraView(string start, string target, DistanceDataJsonDTO jsonData)
+        public static IResult DijkstraView(string start, string target, DistanceDataJsonDTO jsonData, ILogger<Program> logger)
         {
             if (!ValidationProcessor.IsValidForShortestPath(start, target, jsonData))
                 return Results.BadRequest(new { Error = "Invalid input data or JSON is empty" });
@@ -65,7 +69,11 @@ namespace Src.Views
             stopwatch.Stop();
 
             if (dijkstraPath.Path.Count == 0)
+            {
+                logger.LogError($"Dijkstra path from {start} to {target} vertexes not found");
                 return Results.BadRequest(new { Error = "No path found between the specified nodes." });
+            }
+                
 
             var result = new DijkstraResultDTO
             {
@@ -80,7 +88,7 @@ namespace Src.Views
             return Results.Ok(new { Result = result });
         }
 
-        public static IResult DfsView(string start, DistanceDataJsonDTO jsonData)
+        public static IResult DfsView(string start, DistanceDataJsonDTO jsonData, ILogger<Program> logger)
         {
             if (!ValidationProcessor.IsValidForDfs(start, jsonData))
                 return Results.BadRequest(new { Error = "Invalid input data or JSON is empty" });
@@ -89,9 +97,13 @@ namespace Src.Views
             stopwatch.Start();
             List<string> dfsPath = DistanceGraphProcessing.DfsTraversal(jsonData.Distances, start);
             stopwatch.Stop();
-            
+
             if (dfsPath.Count == 0)
+            {
+                logger.LogError($"BFS path from {start} vertex not found");
                 return Results.BadRequest(new { Error = "No nodes reachable from the specified start node." });
+            }
+                
 
             var result = new DfsResultDTO
             {
