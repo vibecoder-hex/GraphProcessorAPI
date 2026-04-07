@@ -43,4 +43,4 @@ jobs:
       working-directory: ./GraphProcessorFrontend
       
     - name: Build Docker image
-      run: docker compose up -d --build
+      run: docker compose build
