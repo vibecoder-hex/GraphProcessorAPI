@@ -10,7 +10,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: ubuntu-latest
 
@@ -44,7 +44,7 @@ jobs:
   
   push-container:
     
-    needs: build
+    needs: build-and-test
     runs-on: ubuntu-latest
     
     steps:
@@ -53,3 +53,8 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build and push
+        run: |
+          docker compose build
+          docker compose push
