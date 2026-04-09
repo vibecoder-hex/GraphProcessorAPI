@@ -44,6 +44,7 @@ jobs:
   
   push-container:
     
+    needs: build
     runs-on: ubuntu-latest
     
     steps:
