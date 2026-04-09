@@ -24,6 +24,7 @@ app.UseHttpLogging();
 if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler();
 
+
 var graphProcessorGroup = app.MapGroup("/api/graph_processor");
 graphProcessorGroup.MapPost("/bfs/{start}/{target}", AlgorithmViews.BfsView)
     .WithName("BfsAlgorithm");
