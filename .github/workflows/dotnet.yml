@@ -43,7 +43,6 @@ jobs:
       working-directory: ./GraphProcessorFrontend
   
   push-container:
-    
     runs-on: ubuntu-latest
       steps:
         - name: Login to Docker Hub
