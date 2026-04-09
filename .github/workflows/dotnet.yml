@@ -65,3 +65,17 @@ jobs:
         run: |
           docker compose build
           docker compose push
+  
+  deploy-to-server:
+    needs: push-container
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Connect to Fedora server by SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.VDS_HOST }}
+          username: ${{ vars.VDS_USERNAME }}
+          key: ${{ secrets.VDS_SSH_KEY }}
+          script: echo Hello World >> deploy.log
+          
