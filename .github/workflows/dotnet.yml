@@ -10,8 +10,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build-and-test:
-
+  build-aspnet-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,20 +30,24 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 'latest'
-        
-    - name: Install dependencies and build frontend
-      run: | 
-        npm install
-        npm run build
-      working-directory: ./GraphProcessorFrontend
+  build-vite-frontend:
+    needs: build-aspnet-backend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          
+      - name: Install dependencies and build frontend
+        run: | 
+          npm install
+          npm run build
+        working-directory: ./GraphProcessorFrontend
   
   push-container:
-    
-    needs: build-and-test
+    needs: [build-vite-frontend, build-aspnet-backend]
     runs-on: ubuntu-latest
     
     steps:
