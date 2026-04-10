@@ -1,4 +1,4 @@
-﻿namespace Src.DTOs
+﻿namespace GraphProcessorAPI.Models
 {
     public record DistanceDataJsonDTO(Dictionary<string, Dictionary<string, int>> Distances);
 

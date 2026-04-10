@@ -26,9 +26,6 @@ if (!app.Environment.IsDevelopment())
 
 app.MapControllers();
 
-app.MapGet("/api/health", () =>
-{
-     Results.Ok(new { status = "Welcome to Graph Processor API" });
-});
+app.MapGet("/api/health", () => Results.Ok(new { status = "Welcome to Graph Processor API" }));
 
 app.Run();

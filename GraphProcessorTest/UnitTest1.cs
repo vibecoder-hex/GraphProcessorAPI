@@ -1,4 +1,4 @@
-﻿using Src.GraphProcessor;
+﻿using GraphProcessorAPI.Services;
 using Xunit.Abstractions;
 
 namespace GraphProcessorTest

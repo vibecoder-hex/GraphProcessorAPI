@@ -1,4 +1,4 @@
-namespace Src.GraphProcessor
+namespace GraphProcessorAPI.Services
 {
     // Basic graph algorithms implementations
     // 1. Depth-First-search

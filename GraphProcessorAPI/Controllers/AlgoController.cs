@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Src.DTOs;
-using Src.GraphProcessor;
+using GraphProcessorAPI.Models;
+using GraphProcessorAPI.Services;
 
 namespace GraphProcessorAPI.Controllers
 {
