@@ -26,15 +26,15 @@ export class NodeMethods {
         if (distances.has(nodeKey)) {
             distances.delete(nodeKey)
             NetworkCanvasProcessor.RemoveVisNode(nodeKey, nodeKey, nodes)
-            return {
-                isValid: true,
-                errorMessage: ""
-            }
         } else {
             return {
                 isValid: false,
                 errorMessage: `Node ${nodeKey} is not exist`
             }
+        }
+        return {
+            isValid: true,
+            errorMessage: ""
         }
     }
 }
@@ -52,10 +52,6 @@ export class EdgeMethods {
             if (!fromNode.has(toNodeKey) && distances.has(toNodeKey)) {
                 fromNode.set(toNodeKey, distNumber)
                 NetworkCanvasProcessor.AddVisEdge(fromNodeKey, toNodeKey, distNumber, edges)
-                return {
-                    isValid: true,
-                    errorMessage: ""
-                }
             } else {
                 return {
                     isValid: false,
@@ -67,6 +63,10 @@ export class EdgeMethods {
                 isValid: false,
                 errorMessage: `Node ${fromNodeKey} is not exist`
             }
+        }
+        return {
+            isValid: true,
+            errorMessage: ""
         }
     }
     public static deleteEdge(fromNodeKey: string, toNodeKey: string, distances: DistanceMap, edges: DataSet<Edge>): IGraphOperationResult {
@@ -81,10 +81,6 @@ export class EdgeMethods {
             if (fromNode.has(toNodeKey) && fromNode) {
                 fromNode.delete(toNodeKey)
                 NetworkCanvasProcessor.RemoveVisEdge(fromNodeKey, toNodeKey, edges)
-                return {
-                    isValid: true,
-                    errorMessage: ""
-                }
             } else {
                 return {
                     isValid: false,
@@ -96,6 +92,10 @@ export class EdgeMethods {
                 isValid: false,
                 errorMessage: `Node ${fromNodeKey} is not exist`
             }
+        }
+        return {
+            isValid: true,
+            errorMessage: ""
         }
     }
 }
