@@ -10,6 +10,7 @@ export class NodeMethods {
             NetworkCanvasProcessor.AddVisNode(nodeKey, nodeKey, nodes)
         } else {
             alert("Incorrect node name value")
+            return
         }
     }
     static deleteNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>) {
@@ -18,6 +19,7 @@ export class NodeMethods {
             NetworkCanvasProcessor.RemoveVisNode(nodeKey, nodeKey, nodes)
         } else {
             alert("Incorrect node name value")
+            return
         }
     }
 }
@@ -38,15 +40,21 @@ export class EdgeMethods {
     }
     static deleteEdge(fromNodeKey: string, toNodeKey: string, distances: DistanceMap, edges: DataSet<Edge>) {
         if (distances.has(fromNodeKey)) {
-            const fromNode: Map<string, number> = distances.get(fromNodeKey)!
+            const fromNode: Map<string, number> | undefined = distances.get(fromNodeKey)
+            if (!fromNode) {
+                alert("Node does not exist")
+                return
+            }
             if (fromNode.has(toNodeKey) && fromNode) {
                 fromNode.delete(toNodeKey)
                 NetworkCanvasProcessor.RemoveVisEdge(fromNodeKey, toNodeKey, edges)
             } else {
                 alert("Incorrect edge name value")
+                return
             }
         } else {
             alert(`${fromNodeKey} is not found`)
+            return
         }
     }
 }
