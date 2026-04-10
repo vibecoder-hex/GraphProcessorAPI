@@ -12,8 +12,8 @@
               </div>
           </div>
           <div v-if="selectedAlgorithmModel === 'bfs' || selectedAlgorithmModel === 'dijkstra'" class="shortest-path-fields">
-              <input class="input" v-model="startVertexModel" type="text" placeholder="Enter start vertex" required>
-              <input class="input" v-model="targetVertexModel" type="text" placeholder="Enter target vertex" required>
+              <input class="input" v-model="startVertexModel" type="text" placeholder="Enter start vertex">
+              <input class="input" v-model="targetVertexModel" type="text" placeholder="Enter target vertex">
           </div>
           <div v-else-if="selectedAlgorithmModel === 'dfs'">
               <input class="input" v-model="startVertexModel" type="text" placeholder="Enter start vertex">
