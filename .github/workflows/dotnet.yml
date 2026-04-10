@@ -31,7 +31,6 @@ jobs:
       run: dotnet test --no-build --verbosity normal
       
   build-vite-frontend:
-    needs: build-aspnet-backend
     runs-on: ubuntu-latest
     
     steps:
