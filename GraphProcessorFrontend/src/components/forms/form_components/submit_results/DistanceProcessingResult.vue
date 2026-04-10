@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-    import type { IDistanceProcessingRootObject } from "../../../../utils/interfaces.ts"
+    import type { IDistanceProcessingRootObject } from "../../../../utils/interfacesAndTypes.ts"
     
     const props = defineProps<IDistanceProcessingRootObject>();
 </script>
