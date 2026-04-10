@@ -35,7 +35,7 @@
     import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
     import type { IDistanceProcessingRootObject, IDistanceRootObject } from "../../utils/interfacesAndTypes.ts"
     
-    const APIURL: string = "/api/graph_processor"
+    const APIURL: string = "/api/GraphAlgorithms"
 
     type Algorithm = "bfs" | "dfs" | "dijkstra"
     const selectedAlgorithm = ref<Algorithm>("dijkstra")

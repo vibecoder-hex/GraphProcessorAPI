@@ -249,11 +249,11 @@ namespace GraphProcessorTest
             {
                 foreach (var (neighbour, weight) in neighbours)
                 {
-                    DistanceGraphProcessing.DijkstraShortestPath(graph, vertex, neighbour);
-                    DistanceGraphProcessing.BfsTraversal(graph, vertex, neighbour);
+                    DistanceGraphProcessingService.DijkstraShortestPath(graph, vertex, neighbour);
+                    DistanceGraphProcessingService.BfsTraversal(graph, vertex, neighbour);
                 }
 
-                DistanceGraphProcessing.DfsTraversal(graph, vertex);
+                DistanceGraphProcessingService.DfsTraversal(graph, vertex);
             }
         }
     }

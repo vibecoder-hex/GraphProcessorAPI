@@ -1,6 +1,6 @@
-using Src.Views;
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
 
 builder.Services.AddHttpLogging(logging => { });
 
@@ -24,17 +24,11 @@ app.UseHttpLogging();
 if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler();
 
+app.MapControllers();
 
-var graphProcessorGroup = app.MapGroup("/api/graph_processor");
-graphProcessorGroup.MapPost("/bfs/{start}/{target}", AlgorithmViews.BfsView)
-    .WithName("BfsAlgorithm");
-graphProcessorGroup.MapPost("/dfs/{start}", AlgorithmViews.DfsView)
-    .WithName("DfsAlgorithm");
-graphProcessorGroup.MapPost("/dijkstra/{start}/{target}", AlgorithmViews.DijkstraView)
-    .WithName("DijkstaAlgorithm");
-
-
-var serviceGroup = app.MapGroup("/api/service");
-serviceGroup.MapGet("/health", () => Results.Ok(new { Message = "Welcome to Graph processor" }));
+app.MapGet("/api/health", () =>
+{
+     Results.Ok(new { status = "Welcome to Graph Processor API" });
+});
 
 app.Run();

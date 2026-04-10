@@ -4,7 +4,7 @@ namespace Src.GraphProcessor
     // 1. Depth-First-search
     // 2. Breadth-First-search
     // 3. Dijktra
-    public static class DistanceGraphProcessing 
+    public static class DistanceGraphProcessingService
     {
         // Reconstruct shortest path
         
