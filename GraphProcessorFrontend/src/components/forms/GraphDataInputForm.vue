@@ -33,7 +33,7 @@
     import UserInputVertexField from './form_components/fields/UserInputVertexField.vue'
     import AlgorithmSelectionField from './form_components/fields/AlgorithmSelectionField.vue'
     import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
-    import type { IDistanceProcessingRootObject, IDistanceRootObject } from "../../utils/interfaces.ts"
+    import type { IDistanceProcessingRootObject, IDistanceRootObject } from "../../utils/interfacesAndTypes.ts"
     
     const APIURL: string = "/api/graph_processor"
 
@@ -94,7 +94,6 @@
             else {
                 errorMessage.value = `Error: ${error}`
             }
-            
             graphProcessingResult.value = null
         }
     }

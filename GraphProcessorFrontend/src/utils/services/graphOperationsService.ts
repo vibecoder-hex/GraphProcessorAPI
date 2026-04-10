@@ -1,60 +1,101 @@
 import { NetworkCanvasProcessor } from "./networkCanvasService.ts"
 import type { Node, DataSet, Edge } from "vis-network/standalone"
+import type { IGraphOperationResult } from "@/utils/interfacesAndTypes.ts";
 
 type DistanceMap = Map<string, Map<string, number>>
 
+
 export class NodeMethods {
-    static addNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>) {
+    public static addNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>): IGraphOperationResult {
         if (!distances.has(nodeKey)) {
             distances.set(nodeKey, new Map())
             NetworkCanvasProcessor.AddVisNode(nodeKey, nodeKey, nodes)
         } else {
-            alert("Incorrect node name value")
-            return
+            return { 
+                isValid: false,
+                errorMessage: `Node ${nodeKey} already exists`
+            }
+        }
+        return { 
+            isValid: true,
+            errorMessage: ""
         }
     }
-    static deleteNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>) {
+    
+    public static deleteNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>): IGraphOperationResult {
         if (distances.has(nodeKey)) {
             distances.delete(nodeKey)
             NetworkCanvasProcessor.RemoveVisNode(nodeKey, nodeKey, nodes)
+            return {
+                isValid: true,
+                errorMessage: ""
+            }
         } else {
-            alert("Incorrect node name value")
-            return
+            return {
+                isValid: false,
+                errorMessage: `Node ${nodeKey} is not exist`
+            }
         }
     }
 }
 
 export class EdgeMethods {
-    static addEdge(fromNodeKey: string, toNodeKey: string, distNumber: number, distances: DistanceMap, edges: DataSet<Edge>) {
-        if (distances.has(fromNodeKey)) {
-            const fromNode: Map<string, number> = distances.get(fromNodeKey)!
-            if (!fromNode.has(toNodeKey) && distances.has(toNodeKey)) {
-                fromNode.set(toNodeKey, distNumber)
-                NetworkCanvasProcessor.AddVisEdge(fromNodeKey, toNodeKey, distNumber, edges)
-            } else {
-                alert("Incorrect edge name value")
-            }
-        } else {
-            alert(`${fromNodeKey} is not found`)
-        }
-    }
-    static deleteEdge(fromNodeKey: string, toNodeKey: string, distances: DistanceMap, edges: DataSet<Edge>) {
+    public static addEdge(fromNodeKey: string, toNodeKey: string, distNumber: number, distances: DistanceMap, edges: DataSet<Edge>): IGraphOperationResult {
         if (distances.has(fromNodeKey)) {
             const fromNode: Map<string, number> | undefined = distances.get(fromNodeKey)
             if (!fromNode) {
-                alert("Node does not exist")
-                return
+                return {
+                    isValid: false,
+                    errorMessage: `Node ${fromNodeKey} does not exist`
+                }
+            }
+            if (!fromNode.has(toNodeKey) && distances.has(toNodeKey)) {
+                fromNode.set(toNodeKey, distNumber)
+                NetworkCanvasProcessor.AddVisEdge(fromNodeKey, toNodeKey, distNumber, edges)
+                return {
+                    isValid: true,
+                    errorMessage: ""
+                }
+            } else {
+                return {
+                    isValid: false,
+                    errorMessage: `Node ${toNodeKey} is not exist`
+                }
+            }
+        } else {
+            return {
+                isValid: false,
+                errorMessage: `Node ${fromNodeKey} is not exist`
+            }
+        }
+    }
+    public static deleteEdge(fromNodeKey: string, toNodeKey: string, distances: DistanceMap, edges: DataSet<Edge>): IGraphOperationResult {
+        if (distances.has(fromNodeKey)) {
+            const fromNode: Map<string, number> | undefined = distances.get(fromNodeKey)
+            if (!fromNode) {
+                return {
+                    isValid: false,
+                    errorMessage: `Node ${fromNodeKey} does not exist`
+                }
             }
             if (fromNode.has(toNodeKey) && fromNode) {
                 fromNode.delete(toNodeKey)
                 NetworkCanvasProcessor.RemoveVisEdge(fromNodeKey, toNodeKey, edges)
+                return {
+                    isValid: true,
+                    errorMessage: ""
+                }
             } else {
-                alert("Incorrect edge name value")
-                return
+                return {
+                    isValid: false,
+                    errorMessage: `Node ${toNodeKey} is not exist`
+                }
             }
         } else {
-            alert(`${fromNodeKey} is not found`)
-            return
+            return {
+                isValid: false,
+                errorMessage: `Node ${fromNodeKey} is not exist`
+            }
         }
     }
 }

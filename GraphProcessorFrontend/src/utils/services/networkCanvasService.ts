@@ -1,18 +1,18 @@
 import { Network, DataSet, type Node, type Edge, type Data, type Options } from 'vis-network/standalone'
 
 export class NetworkCanvasProcessor {
-    static AddVisNode(id: string, node: string, nodes: DataSet<Node>): void {
+    public static AddVisNode(id: string, node: string, nodes: DataSet<Node>): void {
         nodes.add({id: id, label: node})
     }
     
-    static RemoveVisNode(id: string, node: string, nodes: DataSet<Node>) {
+    public static RemoveVisNode(id: string, node: string, nodes: DataSet<Node>) {
         nodes.remove({id: id, label: node})
     }
     
-    static AddVisEdge(from: string, to: string, weight: number, edges: DataSet<Edge>) {
+    public static AddVisEdge(from: string, to: string, weight: number, edges: DataSet<Edge>) {
         edges.add({from: from, to: to, label: weight.toString(), arrows: "to"})
     }
-    static RemoveVisEdge(from: string, to: string, edges: DataSet<Edge>) {
+    public static RemoveVisEdge(from: string, to: string, edges: DataSet<Edge>) {
         const edgeToDelete: Edge | undefined = edges.get({
             filter: (item) => item.from === from && item.to === to
         })[0]
@@ -20,7 +20,7 @@ export class NetworkCanvasProcessor {
             edges.remove(edgeToDelete)
         }
     }
-    static DrawVis(container: HTMLElement, nodes: DataSet<Node>, edges: DataSet<Edge>, options: Options = {
+    public static DrawVis(container: HTMLElement, nodes: DataSet<Node>, edges: DataSet<Edge>, options: Options = {
         height: '100%', 
         width: '100%', 
         autoResize: true
