@@ -7,23 +7,14 @@ namespace GraphProcessorAPI.Services
 
     public interface IDistanceGraphProcessorService
     {
-        Dictionary<string, Dictionary<string, int>> Graph { get; set; }
-        List<string> BfsTraversal(string start, string target);
-        List<string> DfsTraversal(string start);
-        (List<string> Path, int Dist) DijkstraShortestPath(string start, string target);
+        List<string> BfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start, string target);
+        List<string> DfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start);
+        (List<string> Path, int Dist) DijkstraShortestPath(Dictionary<string, Dictionary<string, int>> graph, string start, string target);
     }
     
     public class DistanceGraphProcessingService : IDistanceGraphProcessorService
     {
         // Reconstruct shortest path
-        
-        private Dictionary<string, Dictionary<string, int>> _graph;
-        
-        public Dictionary<string, Dictionary<string, int>> Graph
-        {
-            get => _graph; 
-            set => _graph = value;
-        }
         
         private (List<string> Path, int Dist) ReconstructPath(string start, string target, Dictionary<string, string> parents, Dictionary<string, int>? distances = null) 
         {
@@ -55,9 +46,9 @@ namespace GraphProcessorAPI.Services
             }
         }
 
-        public List<string> BfsTraversal(string start, string target)
+        public List<string> BfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
         {
-            if (start == target || !_graph.ContainsKey(start) || !_graph.ContainsKey(target)) 
+            if (start == target || !graph.ContainsKey(start) || !graph.ContainsKey(target)) 
                 return new List<string>();
             
             Queue<string> queue = new Queue<string>();
@@ -77,7 +68,7 @@ namespace GraphProcessorAPI.Services
                     return output;
                 }
 
-                foreach (var neighbour in _graph[currentVertex])
+                foreach (var neighbour in graph[currentVertex])
                 {
                     if (!visited.Contains(neighbour.Key))
                     {
@@ -91,25 +82,25 @@ namespace GraphProcessorAPI.Services
             return new List<string>();
         }
 
-        public List<string> DfsTraversal(string start)
+        public List<string> DfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start)
         {
-            if (!_graph.ContainsKey(start)) return new List<string>();
+            if (!graph.ContainsKey(start)) return new List<string>();
             
             List<string> output = new List<string>();
             HashSet<string> visited = new HashSet<string>();
-            DfsRecursive(_graph, start, output, visited);
+            DfsRecursive(graph, start, output, visited);
             return output;
         }
 
-        public (List<string> Path, int Dist) DijkstraShortestPath(string start, string target)
+        public (List<string> Path, int Dist) DijkstraShortestPath(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
         {
-            if (!_graph.ContainsKey(start) || !_graph.ContainsKey(target) || start == target)
+            if (!graph.ContainsKey(start) || !graph.ContainsKey(target) || start == target)
                 return (new List<string>(), -1);
             
             PriorityQueue<string, int> priorityQueue = new PriorityQueue<string, int>();
             Dictionary<string, string> parent = new Dictionary<string, string>();
 
-            var distances = _graph.Keys.ToDictionary(vertexVal => vertexVal, weight => int.MaxValue);
+            var distances = graph.Keys.ToDictionary(vertexVal => vertexVal, weight => int.MaxValue);
 
             priorityQueue.Enqueue(start, 0);
             distances[start] = 0;
@@ -118,7 +109,7 @@ namespace GraphProcessorAPI.Services
             {
                 if (currentDist > distances[currentValue]) continue;
 
-                foreach(var (neighbour, weight) in _graph[currentValue])
+                foreach(var (neighbour, weight) in graph[currentValue])
                 {
                     int newDistance = currentDist + weight;
                     if (newDistance < distances[neighbour])

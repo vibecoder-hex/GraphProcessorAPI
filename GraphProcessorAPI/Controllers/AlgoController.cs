@@ -24,8 +24,7 @@ namespace GraphProcessorAPI.Controllers
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             
-            _graphProcessorService.Graph = jsonData.Distances;
-            var dijkstraPath = _graphProcessorService.DijkstraShortestPath(start, target);
+            var dijkstraPath = _graphProcessorService.DijkstraShortestPath(jsonData.Distances, start, target);
             stopwatch.Stop();
             if (dijkstraPath.Path.Count == 0)
             {
@@ -49,8 +48,7 @@ namespace GraphProcessorAPI.Controllers
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            _graphProcessorService.Graph = jsonData.Distances;
-            var bfsPath = _graphProcessorService.BfsTraversal(start, target);
+            var bfsPath = _graphProcessorService.BfsTraversal(jsonData.Distances, start, target);
             stopwatch.Stop();
 
             if (bfsPath.Count == 0)
@@ -76,8 +74,7 @@ namespace GraphProcessorAPI.Controllers
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            _graphProcessorService.Graph = jsonData.Distances;
-            var dfsPath = _graphProcessorService.DfsTraversal(start);
+            var dfsPath = _graphProcessorService.DfsTraversal(jsonData.Distances, start);
             stopwatch.Stop();
 
             if (dfsPath.Count == 0)

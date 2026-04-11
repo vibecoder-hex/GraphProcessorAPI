@@ -113,13 +113,12 @@ namespace GraphProcessorTest
             string start, string target,
             List<string> shortestPathDijkstra, int pathSum, List<string> shortestPathBfs, List<string> pathDfs)
         {
-            _graphProcessorService.Graph = graph;
             
             _output.WriteLine($"Testing path from {start} to {target}");
             _output.WriteLine($"Graph has {graph.Count} vertices");
             
             _output.WriteLine("Starting test Dijkstra");
-            var dijkstraResult = _graphProcessorService.DijkstraShortestPath(start, target);
+            var dijkstraResult = _graphProcessorService.DijkstraShortestPath(graph, start, target);
             _output.WriteLine($"Found distance: {string.Join("->", dijkstraResult.Path)}");
             _output.WriteLine($"Path sum: {pathSum}");
                 
@@ -127,12 +126,12 @@ namespace GraphProcessorTest
             Assert.Equal(pathSum, dijkstraResult.Dist);
             
             _output.WriteLine("Starting test Breadth First Search");
-            var bfsResult = _graphProcessorService.BfsTraversal(start, target);
+            var bfsResult = _graphProcessorService.BfsTraversal(graph, start, target);
             _output.WriteLine($"Found distance: {string.Join("->", bfsResult)}");
             Assert.Equal(shortestPathBfs, bfsResult);
             
             _output.WriteLine("Starting test Depth First Search");
-            var dfsResult = _graphProcessorService.DfsTraversal(start);
+            var dfsResult = _graphProcessorService.DfsTraversal(graph, start);
             _output.WriteLine($"Found distance: {string.Join("->", dfsResult)}");
             Assert.Equal(pathDfs, dfsResult);
             
