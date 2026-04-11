@@ -9,11 +9,13 @@ namespace GraphProcessorAPI.Controllers
     [ApiController]
     public class GraphAlgorithmsController : ControllerBase
     {
-        ILogger<GraphAlgorithmsController> _logger;
+        private readonly ILogger<GraphAlgorithmsController> _logger;
+        private readonly IDistanceGraphProcessorService _graphProcessorService;
 
-        public GraphAlgorithmsController(ILogger<GraphAlgorithmsController> logger)
+        public GraphAlgorithmsController(ILogger<GraphAlgorithmsController> logger, IDistanceGraphProcessorService graphProcessorService)
         {
             _logger = logger;
+            _graphProcessorService = graphProcessorService;
         }
         
         [HttpPost("dijkstra/{start}/{target}")]
@@ -21,7 +23,7 @@ namespace GraphProcessorAPI.Controllers
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            (List<string> Path, int Dist) dijkstraPath = DistanceGraphProcessingService.DijkstraShortestPath(jsonData.Distances, start, target);
+            (List<string> Path, int Dist) dijkstraPath = _graphProcessorService.DijkstraShortestPath(jsonData.Distances, start, target);
             stopwatch.Stop();
             if (dijkstraPath.Path.Count == 0)
             {
@@ -45,7 +47,7 @@ namespace GraphProcessorAPI.Controllers
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            List<string> bfsPath = DistanceGraphProcessingService.BfsTraversal(jsonData.Distances, start, target);
+            List<string> bfsPath = _graphProcessorService.BfsTraversal(jsonData.Distances, start, target);
             stopwatch.Stop();
 
             if (bfsPath.Count == 0)
@@ -71,7 +73,7 @@ namespace GraphProcessorAPI.Controllers
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            List<string> dfsPath = DistanceGraphProcessingService.DfsTraversal(jsonData.Distances, start);
+            List<string> dfsPath = _graphProcessorService.DfsTraversal(jsonData.Distances, start);
             stopwatch.Stop();
 
             if (dfsPath.Count == 0)

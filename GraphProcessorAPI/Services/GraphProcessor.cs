@@ -4,11 +4,19 @@ namespace GraphProcessorAPI.Services
     // 1. Depth-First-search
     // 2. Breadth-First-search
     // 3. Dijktra
-    public static class DistanceGraphProcessingService
+
+    public interface IDistanceGraphProcessorService
+    {
+        List<string> BfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start, string target);
+        List<string> DfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start);
+        (List<string> Path, int Dist) DijkstraShortestPath(Dictionary<string, Dictionary<string, int>> graph, string start, string target);
+    }
+    
+    public class DistanceGraphProcessingService : IDistanceGraphProcessorService
     {
         // Reconstruct shortest path
         
-        private static (List<string> Path, int Dist) ReconstructPath(string start, string target, Dictionary<string, string> parents, Dictionary<string, int>? distances = null) 
+        private (List<string> Path, int Dist) ReconstructPath(string start, string target, Dictionary<string, string> parents, Dictionary<string, int>? distances = null) 
         {
             List<string> output = new List<string>();
             string current = target;
@@ -25,7 +33,7 @@ namespace GraphProcessorAPI.Services
         }
 
         // Recursive Depth fisrt search function
-        private static void DfsRecursive(Dictionary<string, Dictionary<string, int>> graph, string currentVertex, List<string> output, HashSet<string> visited)
+        private void DfsRecursive(Dictionary<string, Dictionary<string, int>> graph, string currentVertex, List<string> output, HashSet<string> visited)
         {
             visited.Add(currentVertex);
             output.Add(currentVertex);
@@ -38,7 +46,7 @@ namespace GraphProcessorAPI.Services
             }
         }
 
-        public static List<string> BfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
+        public List<string> BfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
         {
             if (start == target || !graph.ContainsKey(start) || !graph.ContainsKey(target)) 
                 return new List<string>();
@@ -74,7 +82,7 @@ namespace GraphProcessorAPI.Services
             return new List<string>();
         }
 
-        public static List<string> DfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start)
+        public List<string> DfsTraversal(Dictionary<string, Dictionary<string, int>> graph, string start)
         {
             if (!graph.ContainsKey(start)) return new List<string>();
             
@@ -84,7 +92,7 @@ namespace GraphProcessorAPI.Services
             return output;
         }
 
-        public static (List<string> Path, int Dist) DijkstraShortestPath(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
+        public (List<string> Path, int Dist) DijkstraShortestPath(Dictionary<string, Dictionary<string, int>> graph, string start, string target)
         {
             if (!graph.ContainsKey(start) || !graph.ContainsKey(target) || start == target)
                 return (new List<string>(), -1);

