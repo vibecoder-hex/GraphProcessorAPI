@@ -43,8 +43,12 @@ namespace GraphProcessorTest
                     { "B", new Dictionary<string, int>() }
                 },
                 "A", "B",
+                // Dijkstra test expectations
+                new List<string> { "A", "B" }, 10,
+                // Bfs test expectations
                 new List<string> { "A", "B" },
-                10
+                // Dfs test expectations
+                new List<string> { "A", "B" }
             };
 
             // 3. Путь с альтернативными маршрутами
@@ -58,8 +62,12 @@ namespace GraphProcessorTest
                     { "D", new Dictionary<string, int>() }
                 },
                 "A", "D",
+                // Dijkstra test expectation
+                new List<string> { "A", "B", "D" }, 9,
+                // Bfs test expectations
                 new List<string> { "A", "B", "D" },
-                9  // A->B->D = 5+4 = 9 (короче чем A->C->D = 2+8 = 10)
+                // Dfs test expectations
+                new List<string> { "A", "B", "D", "C" }
             };
 
             // 4. Циклический граф
@@ -72,8 +80,12 @@ namespace GraphProcessorTest
                     { "C", new Dictionary<string, int> { { "A", 4 } } }
                 },
                 "A", "C",
+                // Dijkstra test expectation
+                new List<string> { "A", "B", "C" }, 5,
+                // Bfs test expectations
                 new List<string> { "A", "B", "C" },
-                5
+                // Dfs test expectations
+                new List<string> { "A", "B", "C" },
             };
 
             // 5. Звездообразный граф
@@ -87,35 +99,42 @@ namespace GraphProcessorTest
                     { "C", new Dictionary<string, int>() }
                 },
                 "Center", "C",
+                // Dijkstra test expectation
+                new List<string> { "Center", "C" }, 3,
+                // Bfs test expectations
                 new List<string> { "Center", "C" },
-                3
+                // Dfs test expectations
+                new List<string> { "Center", "A", "B", "C" }
             };
         }
 
         [Theory, MemberData(nameof(ShortestPathAndPathSumData))]
-        public void ShortestPathAndSumTest(Dictionary<string, Dictionary<string, int>> graph, string start, string target, List<string> shortestPath, int pathSum)
+        public void ShortestPathAndSumTest(Dictionary<string, Dictionary<string, int>> graph,
+            string start, string target,
+            List<string> shortestPathDijkstra, int pathSum, List<string> shortestPathBfs, List<string> pathDfs)
         {
+            _graphProcessorService.Graph = graph;
+            
             _output.WriteLine($"Testing path from {start} to {target}");
             _output.WriteLine($"Graph has {graph.Count} vertices");
             
             _output.WriteLine("Starting test Dijkstra");
-            _graphProcessorService.Graph = graph;
             var dijkstraResult = _graphProcessorService.DijkstraShortestPath(start, target);
             _output.WriteLine($"Found distance: {string.Join("->", dijkstraResult.Path)}");
             _output.WriteLine($"Path sum: {pathSum}");
                 
-            Assert.Equal(shortestPath, dijkstraResult.Path);
+            Assert.Equal(shortestPathDijkstra, dijkstraResult.Path);
             Assert.Equal(pathSum, dijkstraResult.Dist);
             
             _output.WriteLine("Starting test Breadth First Search");
             var bfsResult = _graphProcessorService.BfsTraversal(start, target);
             _output.WriteLine($"Found distance: {string.Join("->", bfsResult)}");
-            Assert.Equal(shortestPath, bfsResult);
+            Assert.Equal(shortestPathBfs, bfsResult);
             
             _output.WriteLine("Starting test Depth First Search");
             var dfsResult = _graphProcessorService.DfsTraversal(start);
             _output.WriteLine($"Found distance: {string.Join("->", dfsResult)}");
-            Assert.Equal(shortestPath, dfsResult);
+            Assert.Equal(pathDfs, dfsResult);
             
             _output.WriteLine("Tests completed");
         }
