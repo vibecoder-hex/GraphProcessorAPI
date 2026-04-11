@@ -7,10 +7,12 @@ namespace GraphProcessorTest
     {
         // Статический метод с 20 тестовыми графами
         private readonly ITestOutputHelper _output;
+        private readonly IDistanceGraphProcessorService _graphProcessorService;
 
         public AlgorithmTestClass(ITestOutputHelper output)
         {
             _output = output;
+            _graphProcessorService = new DistanceGraphProcessingService();
         }
 
         public static IEnumerable<object[]> GetGraphTestData()
@@ -249,11 +251,11 @@ namespace GraphProcessorTest
             {
                 foreach (var (neighbour, weight) in neighbours)
                 {
-                    DistanceGraphProcessingService.DijkstraShortestPath(graph, vertex, neighbour);
-                    DistanceGraphProcessingService.BfsTraversal(graph, vertex, neighbour);
+                    _graphProcessorService.DijkstraShortestPath(graph, vertex, neighbour);
+                    _graphProcessorService.BfsTraversal(graph, vertex, neighbour);
                 }
 
-                DistanceGraphProcessingService.DfsTraversal(graph, vertex);
+                _graphProcessorService.DfsTraversal(graph, vertex);
             }
         }
     }
