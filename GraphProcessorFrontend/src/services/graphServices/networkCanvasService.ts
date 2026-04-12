@@ -1,4 +1,5 @@
-import { Network, DataSet, type Node, type Edge, type Data, type Options } from 'vis-network/standalone'
+import {Network, DataSet, type Node, type Edge, type Data, type Options } from 'vis-network/standalone'
+
 
 export class NetworkCanvasProcessor {
     public static AddVisNode(id: string, node: string, nodes: DataSet<Node>): void {
@@ -23,12 +24,37 @@ export class NetworkCanvasProcessor {
     public static DrawVis(container: HTMLElement, nodes: DataSet<Node>, edges: DataSet<Edge>, options: Options = {
         height: '100%', 
         width: '100%', 
-        autoResize: true
+        autoResize: true,
+        edges: { color: "#000000" }
+        
     }) {
         const data: Data = {
             nodes: nodes,
             edges: edges
         }
         return new Network(container, data, options)
+    }
+    
+    public static ResetColors(edges: DataSet<Edge>) {
+        const edgeIds = edges.getIds();
+        const resetUpdates = edgeIds.map((id) => ({
+            id: id,
+            color: "#000000"
+        }))
+        edges.update(resetUpdates)
+    }
+    public static UpdateColor(edges: DataSet<Edge>, shortestPathArray: string[]) {
+        for (let i = 0; i < shortestPathArray.length - 1; i++) {
+            const fromNode: string | undefined = shortestPathArray[i]
+            const toNode: string | undefined = shortestPathArray[i + 1]
+            var connectedEdges = edges.get({
+                filter: (edge: Edge) => edge.from === fromNode && edge.to === toNode,
+                fields: ["id"]
+            }).map((pickedEdge: Edge) => ({
+                id: pickedEdge.id,
+                color: "red"
+            }))
+            edges.update(connectedEdges)
+        }
     }
 }

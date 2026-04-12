@@ -31,19 +31,25 @@
     <div v-if="distanceMap.size > 0">
         <label>Show graph canvas</label> 
         <input type="checkbox" v-model="showCanvas">
-        <NetworkVisualizationCanvas v-if="showCanvas" :visNodes="visNodes" :visEdges="visEdges"/>
+        <div v-if="showCanvas">
+            <NetworkVisualizationCanvas :visNodes="visNodes" :visEdges="visEdges"/>
+            <button class="button is-danger" @click="NetworkCanvasProcessor.ResetColors(visEdges)">Reset edge colors</button>
+        </div>
     </div>
     
 </template>
  
 <script setup lang="ts">
     import { ref } from 'vue';
-    import { DataSet, type Edge, type Node } from "vis-network/standalone"
     import NetworkVisualizationCanvas from "../../../graph_view/NetworkVisualisationCanvas.vue";
+    import { NetworkCanvasProcessor } from "@/services/graphServices/networkCanvasService.ts";
     import { NodeMethods, EdgeMethods } from "@/services/graphServices/graphOperationsService.ts"
     import type { IOperationResult } from "@/models/interfacesAndTypes.ts";
+    import { DataSet, type Node, type Edge } from "vis-network/standalone"
 
     const distanceMap = defineModel<Map<string, Map<string, number>>>("distanceMap", {required: true});
+    const visNodes = defineModel<DataSet<Node>>("visNodes", {required: true});
+    const visEdges = defineModel<DataSet<Edge>>("visEdges", {required: true});
     
     const nodeNameValue = ref<string>("")
     const fromNodeValue = ref<string>("")
@@ -54,9 +60,6 @@
     
     const nodeCardMessage = ref<string>("")
     const edgeCardMessage = ref<string>("")
-
-    const visNodes = new DataSet<Node>()
-    const visEdges = new DataSet<Edge>()
     
     function handleNodesOperation(operationResult: IOperationResult) {
         if (!operationResult.isValid) {

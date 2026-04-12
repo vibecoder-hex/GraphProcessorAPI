@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent>
         <p class="is-size-5">Please enter graph params</p>
-        <UserInputVertexField v-model:distanceMap="distanceMap"/>
+        <UserInputVertexField v-model:distanceMap="distanceMap" v-model:visEdges="visEdges" v-model:visNodes="visNodes"/>
         <div v-if="distanceMap.size > 0" class="graph-structure">
             <div>
                 <label>Show graph structure</label>
@@ -32,11 +32,10 @@
     import UserInputVertexField from './form_components/fields/UserInputVertexField.vue'
     import AlgorithmSelectionField from './form_components/fields/AlgorithmSelectionField.vue'
     import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
-    import type {
-      IDistanceProcessingResultObject,
-      IDistanceProcessingRootObject, IDistanceRootObject, IResponseOperationResult
-    } from "@/models/interfacesAndTypes.ts"
+    import type { IDistanceProcessingRootObject, IDistanceRootObject, IResponseOperationResult } from "@/models/interfacesAndTypes.ts"
     import { getPathFromRequest } from "@/services/http_requests/GraphAlgorithmsRequests.ts";
+    import {NetworkCanvasProcessor} from "@/services/graphServices/networkCanvasService.ts";
+    import { DataSet, type Edge, type Node } from "vis-network/standalone"
 
     const APIURL: string = "/api/GraphAlgorithms"
 
@@ -50,6 +49,9 @@
     const distanceMap = ref<Map<string, Map<string, number>>>(new Map())
     const graphProcessingResult = ref<IDistanceProcessingRootObject | null>(null)
     const errorMessage = ref<string>("")
+
+    const visNodes = new DataSet<Node>()
+    const visEdges = new DataSet<Edge>()
 
 
     function getObjectFromMap(): IDistanceRootObject {
@@ -88,8 +90,10 @@
         if (pathRequest && pathRequest.operation.isValid) {
             const shortestPath: IDistanceProcessingRootObject | null  = pathRequest.responseData
             if (shortestPath !== null) {
-              graphProcessingResult.value = shortestPath
-              errorMessage.value = ""
+                graphProcessingResult.value = shortestPath
+                errorMessage.value = ""
+                NetworkCanvasProcessor.ResetColors(visEdges);
+                NetworkCanvasProcessor.UpdateColor(visEdges, shortestPath.result.shortestPath);
             }
         }
         else {
