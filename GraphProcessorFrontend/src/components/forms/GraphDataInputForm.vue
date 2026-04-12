@@ -18,7 +18,7 @@
                                      v-model:startVertex="startVertex"
                                      v-model:targetVertex="targetVertex"
             />
-            <button class="button is-primary" @click="getPathFromAPI()">Send path</button>
+            <button class="button is-primary" @click="handleRequestedPath()">Send path</button>
             <div v-if="graphProcessingResult">
                 <DistanceProcessingResult :result="graphProcessingResult.result"/>
             </div>
@@ -29,12 +29,15 @@
 
 <script setup lang="ts">
     import { ref } from 'vue'
-    import axios from 'axios'
     import UserInputVertexField from './form_components/fields/UserInputVertexField.vue'
     import AlgorithmSelectionField from './form_components/fields/AlgorithmSelectionField.vue'
     import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
-    import type { IDistanceProcessingRootObject, IDistanceRootObject } from "../../utils/interfacesAndTypes.ts"
-    
+    import type {
+      IDistanceProcessingResultObject,
+      IDistanceProcessingRootObject, IDistanceRootObject, IResponseOperationResult
+    } from "@/models/interfacesAndTypes.ts"
+    import { getPathFromRequest } from "@/services/http_requests/GraphAlgorithmsRequests.ts";
+
     const APIURL: string = "/api/GraphAlgorithms"
 
     type Algorithm = "bfs" | "dfs" | "dijkstra"
@@ -80,23 +83,20 @@
         }
     }
     
-    async function getPathFromAPI() {
-        const selectedUrl: string = getSelectedUrl()
-        try {
-            const distanceJSONObject = getObjectFromMap()
-            const response = await axios.post(selectedUrl, distanceJSONObject)
-            graphProcessingResult.value = response.data
-            errorMessage.value = ""
-        } catch(error) {
-            if (axios.isAxiosError(error)) {
-                errorMessage.value = `Error: ${error} ${error.response?.data.error}`
+    async function handleRequestedPath(): Promise<void> {
+        const pathRequest: IResponseOperationResult = await getPathFromRequest(getSelectedUrl(), getObjectFromMap())
+        if (pathRequest && pathRequest.operation.isValid) {
+            const shortestPath: IDistanceProcessingRootObject | null  = pathRequest.responseData
+            if (shortestPath !== null) {
+              graphProcessingResult.value = shortestPath
+              errorMessage.value = ""
             }
-            else {
-                errorMessage.value = `Error: ${error}`
-            }
-            graphProcessingResult.value = null
+        }
+        else {
+             errorMessage.value = pathRequest.operation.errorMessage
         }
     }
+    
 </script>
 
 <style scoped>

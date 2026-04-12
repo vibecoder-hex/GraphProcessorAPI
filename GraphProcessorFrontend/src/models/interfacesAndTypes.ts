@@ -1,4 +1,4 @@
-export type allPossibleDataType = string | number | boolean | string[] | number[] | boolean[] | undefined | null
+export type allPossibleDataType = string | number | boolean | string[] | number[] | boolean[] | null
 
 export interface IDistanceProcessingResultObject {
     algorithm: string,
@@ -22,7 +22,12 @@ export interface IDistanceGraphStructureObject {
     }
 }
 
-export interface IGraphOperationResult {
+export interface IOperationResult {
     isValid: boolean,
-    errorMessage: string
+    errorMessage: string,
+}
+
+export interface IResponseOperationResult {
+    operation: IOperationResult,
+    responseData: IDistanceProcessingRootObject | null
 }

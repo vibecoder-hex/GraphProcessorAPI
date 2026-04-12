@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
     import { onMounted, onUnmounted, ref } from 'vue'
-    import { NetworkCanvasProcessor } from "../../utils/services/networkCanvasService.js";
+    import { NetworkCanvasProcessor } from "@/services/graphServices/networkCanvasService.ts";
     import type { DataSet, Node, Edge, Network } from "vis-network/standalone"
 
     interface IProps {

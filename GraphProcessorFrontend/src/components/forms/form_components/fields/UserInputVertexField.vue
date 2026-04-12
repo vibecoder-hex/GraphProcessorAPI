@@ -40,8 +40,8 @@
     import { ref } from 'vue';
     import { DataSet, type Edge, type Node } from "vis-network/standalone"
     import NetworkVisualizationCanvas from "../../../graph_view/NetworkVisualisationCanvas.vue";
-    import { NodeMethods, EdgeMethods } from "../../../../utils/services/graphOperationsService.ts"
-    import type { IGraphOperationResult } from "@/utils/interfacesAndTypes.ts";
+    import { NodeMethods, EdgeMethods } from "@/services/graphServices/graphOperationsService.ts"
+    import type { IOperationResult } from "@/models/interfacesAndTypes.ts";
 
     const distanceMap = defineModel<Map<string, Map<string, number>>>("distanceMap", {required: true});
     
@@ -58,7 +58,7 @@
     const visNodes = new DataSet<Node>()
     const visEdges = new DataSet<Edge>()
     
-    function handleNodesOperation(operationResult: IGraphOperationResult) {
+    function handleNodesOperation(operationResult: IOperationResult) {
         if (!operationResult.isValid) {
             nodeCardMessage.value = operationResult.errorMessage
         }
@@ -69,7 +69,7 @@
         
     }
     
-    function handleEdgeMethods(operationResult: IGraphOperationResult) {
+    function handleEdgeMethods(operationResult: IOperationResult) {
         if (!operationResult.isValid) {
             edgeCardMessage.value = operationResult.errorMessage
         }
@@ -78,6 +78,7 @@
             fromNodeValue.value = ""
             toNodeValue.value = ""
             distanceNumber.value = 0
+              
         }
     }
     

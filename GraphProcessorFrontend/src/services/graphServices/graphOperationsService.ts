@@ -1,12 +1,12 @@
 import { NetworkCanvasProcessor } from "./networkCanvasService.ts"
 import type { Node, DataSet, Edge } from "vis-network/standalone"
-import type { IGraphOperationResult } from "@/utils/interfacesAndTypes.ts";
+import type { IOperationResult } from "@/models/interfacesAndTypes.ts";
 
 type DistanceMap = Map<string, Map<string, number>>
 
 
 export class NodeMethods {
-    public static addNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>): IGraphOperationResult {
+    public static addNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>): IOperationResult {
         if (!distances.has(nodeKey)) {
             distances.set(nodeKey, new Map())
             NetworkCanvasProcessor.AddVisNode(nodeKey, nodeKey, nodes)
@@ -22,7 +22,7 @@ export class NodeMethods {
         }
     }
     
-    public static deleteNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>): IGraphOperationResult {
+    public static deleteNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>): IOperationResult {
         if (distances.has(nodeKey)) {
             distances.delete(nodeKey)
             NetworkCanvasProcessor.RemoveVisNode(nodeKey, nodeKey, nodes)
@@ -40,7 +40,7 @@ export class NodeMethods {
 }
 
 export class EdgeMethods {
-    public static addEdge(fromNodeKey: string, toNodeKey: string, distNumber: number, distances: DistanceMap, edges: DataSet<Edge>): IGraphOperationResult {
+    public static addEdge(fromNodeKey: string, toNodeKey: string, distNumber: number, distances: DistanceMap, edges: DataSet<Edge>): IOperationResult {
         if (distances.has(fromNodeKey)) {
             const fromNode: Map<string, number> | undefined = distances.get(fromNodeKey)
             if (!fromNode) {
@@ -69,7 +69,7 @@ export class EdgeMethods {
             errorMessage: ""
         }
     }
-    public static deleteEdge(fromNodeKey: string, toNodeKey: string, distances: DistanceMap, edges: DataSet<Edge>): IGraphOperationResult {
+    public static deleteEdge(fromNodeKey: string, toNodeKey: string, distances: DistanceMap, edges: DataSet<Edge>): IOperationResult {
         if (distances.has(fromNodeKey)) {
             const fromNode: Map<string, number> | undefined = distances.get(fromNodeKey)
             if (!fromNode) {
