@@ -94,6 +94,7 @@
         }
         else {
              errorMessage.value = pathRequest.operation.errorMessage
+             graphProcessingResult.value = null
         }
     }
     
