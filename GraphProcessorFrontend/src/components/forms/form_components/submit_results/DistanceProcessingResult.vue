@@ -10,7 +10,7 @@
                 <th>Start Vertex</th>
                 <td>{{ props.result.startVertex }}</td>
             </tr>
-            <tr>
+            <tr v-if="props.result.targetVertex">
                 <th>Target Vertex</th>
                 <td>{{ props.result.targetVertex }}</td>
             </tr>
@@ -24,9 +24,9 @@
             </tr>
             <tr>
                 <th>Time</th>
-                <td>{{ props.result.timeNs}}</td>
+                <td>{{ props.result.timeNs }}</td>
             </tr>
-            <tr>
+            <tr v-if="props.result.totalDistance">
                 <th>Distance</th>
                 <td>{{ props.result.totalDistance }}</td>
             </tr>

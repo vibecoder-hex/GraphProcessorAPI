@@ -79,7 +79,7 @@ namespace GraphProcessorAPI.Controllers
 
             if (dfsPath.Count == 0)
             {
-                _logger.LogError($"BFS path from {start} vertex not found");
+                _logger.LogError($"DFS path from {start} vertex not found");
                 return BadRequest(new { Error = "No nodes reachable from the specified start node." });
             }
                 
