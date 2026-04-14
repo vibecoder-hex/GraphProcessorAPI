@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { ref } from 'vue'
-    import GraphStructFileUploadField from "@/components/forms/form_components/fields/GraphStructFileUploadField.vue";
     import UserInputVertexField from './form_components/fields/UserInputVertexField.vue'
     import AlgorithmSelectionField from './form_components/fields/AlgorithmSelectionField.vue'
     import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
