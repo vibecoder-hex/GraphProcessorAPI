@@ -1,34 +1,6 @@
-<template>
-    <form @submit.prevent>
-        <p class="is-size-5">Please enter graph params</p>
-        <UserInputVertexField v-model:distanceMap="distanceMap" v-model:visEdges="visEdges" v-model:visNodes="visNodes"/>
-        <div v-if="distanceMap.size > 0" class="graph-structure">
-            <div>
-                <label>Show graph structure</label>
-                <input type="checkbox" v-model="showGraphStructure">
-            </div>
-            <div v-if="showGraphStructure">
-                <pre><code>
-                    {{ JSON.stringify(getObjectFromMap(), null, 2) }}
-                </code></pre>
-                <button class="button is-text" @click="downloadGraphStructure(getObjectFromMap())" >Download graph structure</button>
-            </div>
-
-           <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
-                                     v-model:startVertex="startVertex"
-                                     v-model:targetVertex="targetVertex"
-            />
-            <button class="button is-primary" @click="handleRequestedPath()">Send path</button>
-            <div v-if="graphProcessingResult">
-                <DistanceProcessingResult :result="graphProcessingResult.result"/>
-            </div>
-            <div>{{ errorMessage }}</div>
-        </div>
-    </form>
-</template>
-
 <script setup lang="ts">
     import { ref } from 'vue'
+    import GraphStructFileUploadField from "@/components/forms/form_components/fields/GraphStructFileUploadField.vue";
     import UserInputVertexField from './form_components/fields/UserInputVertexField.vue'
     import AlgorithmSelectionField from './form_components/fields/AlgorithmSelectionField.vue'
     import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
@@ -103,6 +75,37 @@
     }
     
 </script>
+
+<template>
+    <form @submit.prevent>
+        <p class="is-size-5">Please enter graph params or load from file</p>
+        <UserInputVertexField v-model:distanceMap="distanceMap" v-model:visEdges="visEdges" v-model:visNodes="visNodes"/>
+        <GraphStructFileUploadField></GraphStructFileUploadField>
+        <div v-if="distanceMap.size > 0" class="graph-structure">
+            <div>
+                <label>Show graph structure</label>
+                <input type="checkbox" v-model="showGraphStructure">
+            </div>
+            <div v-if="showGraphStructure">
+                <pre><code>
+                    {{ JSON.stringify(getObjectFromMap(), null, 2) }}
+                </code></pre>
+                <button class="button is-text" @click="downloadGraphStructure(getObjectFromMap())" >Download graph structure</button>
+            </div>
+
+           <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
+                                     v-model:startVertex="startVertex"
+                                     v-model:targetVertex="targetVertex"
+            />
+            <button class="button is-primary" @click="handleRequestedPath()">Send path</button>
+            <div v-if="graphProcessingResult">
+                <DistanceProcessingResult :result="graphProcessingResult.result"/>
+            </div>
+            <div>{{ errorMessage }}</div>
+        </div>
+    </form>
+</template>
+
 
 <style scoped>
     .graph-structure {

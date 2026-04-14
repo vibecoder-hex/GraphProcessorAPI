@@ -1,3 +1,9 @@
+<script setup lang="ts">
+    const selectedAlgorithmModel = defineModel<string>('selectedAlgorithm')
+    const startVertexModel = defineModel<string>('startVertex')
+    const targetVertexModel = defineModel<string>('targetVertex')
+</script>
+
 <template>
       <div class="algorithm-selection">
           <label for="algorithm">Select algorithm:</label>
@@ -21,11 +27,7 @@
       </div>
 </template>
 
-<script setup lang="ts">
-    const selectedAlgorithmModel = defineModel<string>('selectedAlgorithm')
-    const startVertexModel = defineModel<string>('startVertex')
-    const targetVertexModel = defineModel<string>('targetVertex')
-</script>
+
 
 
 <style scoped>

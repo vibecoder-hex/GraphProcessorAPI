@@ -1,7 +1,3 @@
-<template>
-    <div id="network-container" ref="networkContainer"></div>
-</template>
-
 <script setup lang="ts">
     import { onMounted, onUnmounted, ref } from 'vue'
     import { NetworkCanvasProcessor } from "@/services/graphServices/networkCanvasService.ts";
@@ -32,6 +28,10 @@
         }
     })
 </script>
+
+<template>
+    <div id="network-container" ref="networkContainer"></div>
+</template>
 
 <style scoped>
   #network-container {

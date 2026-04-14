@@ -1,3 +1,10 @@
+
+<script setup lang="ts">
+    import type { IDistanceProcessingRootObject } from "@/models/interfacesAndTypes.ts"
+    
+    const props = defineProps<IDistanceProcessingRootObject>();
+</script>
+
 <template>
     <table class="table is-bordered">
         <thead>
@@ -33,12 +40,6 @@
         </tbody>
     </table>
 </template>
-
-<script setup lang="ts">
-    import type { IDistanceProcessingRootObject } from "@/models/interfacesAndTypes.ts"
-    
-    const props = defineProps<IDistanceProcessingRootObject>();
-</script>
 
 <style scoped>
     table {
