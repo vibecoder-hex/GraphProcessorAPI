@@ -1,10 +1,14 @@
-create type graphtype as enum ('Oreinted', 'Non-oreinted');
+create type graphtype as enum ('Oriented', 'Non-oriented');
 
 alter type graphtype owner to vibecoderhex;
 
 create type accountrole as enum ('User', 'Admin');
 
 alter type accountrole owner to vibecoderhex;
+
+create type algorithm_type as enum ('Dijkstra', 'BFS', 'DFS');
+
+alter type algorithm_type owner to vibercoderhex;
 
 create table "user"
 (
@@ -58,7 +62,7 @@ create table processing_result
     graph_id             integer          not null
         constraint processing_result__fk
             references graph,
-    algorithm            varchar(20)      not null,
+    algorithm            graph_processor.algorithm_type     not null,
     time_in_ns           double precision not null,
     start_vertex         varchar(20)      not null,
     target_vertex        varchar(20),
@@ -77,9 +81,7 @@ create table node
     node_id     serial
         constraint node_id_pk
             primary key,
-    value       varchar(20) not null
-        constraint node_unq
-            unique,
+    value       varchar(40) not null,
     image       varchar(256),
     color       varchar(20),
     description varchar(80),
@@ -99,7 +101,7 @@ create table edge
     edge_id     serial
         constraint edge_id_pk
             primary key,
-    value       varchar(20) not null,
+    value       varchar(40) not null,
     description varchar(80),
     weight      integer     not null,
     graph_id    integer     not null
