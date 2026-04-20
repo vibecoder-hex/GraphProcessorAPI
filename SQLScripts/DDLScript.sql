@@ -8,7 +8,7 @@ alter type accountrole owner to vibecoderhex;
 
 create type algorithm_type as enum ('Dijkstra', 'BFS', 'DFS');
 
-alter type algorithm_type owner to vibercoderhex;
+alter type algorithm_type owner to vibecoderhex;
 
 create table "user"
 (
@@ -20,7 +20,7 @@ create table "user"
     last_name     varchar(20),
     created_at    date                        not null,
     email         varchar(80)                 not null,
-    phone         varchar(10),
+    phone         varchar(20),
     password_hash char(64)                    not null,
     is_active     boolean                     not null,
     role          graph_processor.accountrole not null,
@@ -64,9 +64,9 @@ create table processing_result
             references graph,
     algorithm            graph_processor.algorithm_type     not null,
     time_in_ns           double precision not null,
-    start_vertex         varchar(20)      not null,
-    target_vertex        varchar(20),
-    shortest_path        varchar(20)[]    not null,
+    start_vertex         varchar(40)      not null,
+    target_vertex        varchar(40),
+    shortest_path        varchar(40)[]    not null,
     total_distance       integer
 );
 
