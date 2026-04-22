@@ -3,12 +3,13 @@
     import NetworkVisualizationCanvas from "../../../graph_view/NetworkVisualisationCanvas.vue";
     import { NetworkCanvasProcessor } from "@/services/graphServices/networkCanvasService.ts";
     import { NodeMethods, EdgeMethods } from "@/services/graphServices/graphOperationsService.ts"
-    import type { IOperationResult } from "@/models/interfacesAndTypes.ts";
+    import type { GraphType, IOperationResult } from "@/models/interfacesAndTypes.ts";
     import { DataSet, type Node, type Edge } from "vis-network/standalone"
 
     const distanceMap = defineModel<Map<string, Map<string, number>>>("distanceMap", {required: true});
     const visNodes = defineModel<DataSet<Node>>("visNodes", {required: true});
     const visEdges = defineModel<DataSet<Edge>>("visEdges", {required: true});
+    const selectedGraphType = defineModel<GraphType>("selectedGraphType", { required: true });
     
     const nodeNameValue = ref<string>("")
     const fromNodeValue = ref<string>("")
@@ -47,6 +48,7 @@
 </script>
 
 <template>
+    <p class="is-size-5">Please enter graph parameters</p>
     <div class="user-input">
         <div class="node-input card">
             <div class="card-content">
@@ -70,7 +72,7 @@
                     <input class="input" v-model="toNodeValue" type="text">
                     <label>Distance</label>
                     <input class="input" v-model="distanceNumber" type="number"><br><br>
-                    <button class="button" @click="handleEdgeMethods(EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges))">Add path</button> <button class="button" @click="handleEdgeMethods(EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges))">Delete path</button>
+                    <button class="button" @click="handleEdgeMethods(EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges, selectedGraphType))">Add path</button> <button class="button" @click="handleEdgeMethods(EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges, selectedGraphType))">Delete path</button>
                 </div>
                 <p class="has-text-warning">{{ edgeCardMessage }}</p>
             </div>
@@ -103,6 +105,8 @@
         .user-input{
             display: flex;
             flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
         }
     }
 </style>

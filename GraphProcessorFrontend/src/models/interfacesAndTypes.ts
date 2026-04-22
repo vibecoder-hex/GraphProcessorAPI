@@ -1,4 +1,6 @@
 export type allPossibleDataType = string | number | boolean | string[] | number[] | boolean[] | null
+export type Algorithm = "bfs" | "dfs" | "dijkstra"
+export type GraphType = "oriented" | "non-oriented"
 
 export interface IDistanceProcessingResultObject {
     algorithm: string,

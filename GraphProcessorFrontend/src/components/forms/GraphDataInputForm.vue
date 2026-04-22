@@ -1,16 +1,23 @@
 <script setup lang="ts">
     import { ref } from 'vue'
     import UserInputVertexField from './form_components/fields/UserInputVertexField.vue'
-    import AlgorithmSelectionField from './form_components/fields/AlgorithmSelectionField.vue'
+    import PathSearchField from "@/components/forms/form_components/fields/PathSearchField.vue";
+    import AlgorithmSelector from "@/components/forms/form_components/selectors/AlgorithmSelector.vue";
+    import GraphTypeSelector from "@/components/forms/form_components/selectors/GraphTypeSelector.vue";
     import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
-    import type { IDistanceProcessingRootObject, IDistanceRootObject, IResponseOperationResult } from "@/models/interfacesAndTypes.ts"
+    import type {
+      IDistanceProcessingRootObject,
+      IDistanceRootObject,
+      IResponseOperationResult,
+      Algorithm,
+      GraphType
+    } from "@/models/interfacesAndTypes.ts"
     import { getPathFromRequest } from "@/services/http_requests/GraphAlgorithmsRequests.ts";
     import {NetworkCanvasProcessor} from "@/services/graphServices/networkCanvasService.ts";
     import { DataSet, type Edge, type Node } from "vis-network/standalone"
 
     const APIURL: string = "/api/GraphAlgorithms"
-
-    type Algorithm = "bfs" | "dfs" | "dijkstra"
+    
     const selectedAlgorithm = ref<Algorithm>("dijkstra")
 
     const startVertex = ref<string>("")
@@ -24,6 +31,8 @@
     const visNodes = new DataSet<Node>()
     const visEdges = new DataSet<Edge>()
 
+    const selectedGraphType = ref<GraphType>("oriented")
+    const isGraphTypeSelected = ref<boolean>(false)
 
     function getObjectFromMap(): IDistanceRootObject {
         const distanceObject: IDistanceRootObject = { Distances: {} }
@@ -77,8 +86,12 @@
 
 <template>
     <form @submit.prevent>
-        <p class="is-size-5">Please enter graph params</p>
-        <UserInputVertexField v-model:distanceMap="distanceMap" v-model:visEdges="visEdges" v-model:visNodes="visNodes"/>
+        <GraphTypeSelector v-model:selectedGraphType="selectedGraphType" v-model:isGraphTypeSelected="isGraphTypeSelected"></GraphTypeSelector>
+        <UserInputVertexField v-if="isGraphTypeSelected"
+                              v-model:selectedGraphType="selectedGraphType"
+                              v-model:distanceMap="distanceMap"
+                              v-model:visEdges="visEdges"
+                              v-model:visNodes="visNodes"/>
         <div v-if="distanceMap.size > 0" class="graph-structure">
             <div>
                 <label>Show graph structure</label>
@@ -90,8 +103,9 @@
                 </code></pre>
                 <button class="button is-text" @click="downloadGraphStructure(getObjectFromMap())" >Download graph structure</button>
             </div>
-
-           <AlgorithmSelectionField v-model:selectedAlgorithm="selectedAlgorithm"
+            
+           <AlgorithmSelector v-model:selectedAlgorithm="selectedAlgorithm" />
+           <PathSearchField v-model:selectedAlgorithm="selectedAlgorithm"
                                      v-model:startVertex="startVertex"
                                      v-model:targetVertex="targetVertex"
             />

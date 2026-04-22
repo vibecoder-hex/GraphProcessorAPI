@@ -1,4 +1,5 @@
 import {Network, DataSet, type Node, type Edge, type Data, type Options } from 'vis-network/standalone'
+import type { GraphType } from "@/models/interfacesAndTypes.ts";
 
 
 export class NetworkCanvasProcessor {
@@ -10,8 +11,9 @@ export class NetworkCanvasProcessor {
         nodes.remove({id: id, label: node})
     }
     
-    public static AddVisEdge(from: string, to: string, weight: number, edges: DataSet<Edge>) {
-        edges.add({from: from, to: to, label: weight.toString(), arrows: "to"})
+    public static AddVisEdge(from: string, to: string, weight: number, edges: DataSet<Edge>, selectedGraphType: GraphType) {
+        const arrowType: string = selectedGraphType === 'oriented' ? 'to': ''
+        edges.add({from: from, to: to, label: weight.toString(), arrows: arrowType})
     }
     public static RemoveVisEdge(from: string, to: string, edges: DataSet<Edge>) {
         const edgeToDelete: Edge | undefined = edges.get({

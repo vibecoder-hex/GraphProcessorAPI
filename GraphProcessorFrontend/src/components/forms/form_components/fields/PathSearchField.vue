@@ -6,17 +6,6 @@
 
 <template>
       <div class="algorithm-selection">
-          <label for="algorithm">Select algorithm:</label>
-          <div class="control">
-              <div class="select">
-                  <select v-model="selectedAlgorithmModel">
-                      <option disabled value="">Select algorithm</option>
-                      <option value="dfs">DFS (в глубину)</option>
-                      <option value="bfs">BFS (в ширину)</option>
-                      <option value="dijkstra">Dijkstra</option>
-                  </select>
-              </div>
-          </div>
           <div v-if="selectedAlgorithmModel === 'bfs' || selectedAlgorithmModel === 'dijkstra'" class="shortest-path-fields">
               <input class="input" v-model="startVertexModel" type="text" placeholder="Enter start vertex">
               <input class="input" v-model="targetVertexModel" type="text" placeholder="Enter target vertex">
@@ -26,9 +15,6 @@
           </div>
       </div>
 </template>
-
-
-
 
 <style scoped>
     @media(min-width: 1000px){
