@@ -77,9 +77,8 @@
 
 <template>
     <form @submit.prevent>
-        <p class="is-size-5">Please enter graph params or load from file</p>
+        <p class="is-size-5">Please enter graph params</p>
         <UserInputVertexField v-model:distanceMap="distanceMap" v-model:visEdges="visEdges" v-model:visNodes="visNodes"/>
-        <GraphStructFileUploadField></GraphStructFileUploadField>
         <div v-if="distanceMap.size > 0" class="graph-structure">
             <div>
                 <label>Show graph structure</label>
