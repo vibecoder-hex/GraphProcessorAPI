@@ -17,7 +17,7 @@ export class NetworkCanvasProcessor {
     }
     public static RemoveVisEdge(from: string, to: string, edges: DataSet<Edge>) {
         const edgeToDelete: Edge | undefined = edges.get({
-            filter: (item) => item.from === from && item.to === to
+            filter: (item) => (item.from === from && item.to === to) || (item.from === to && item.to === from)
         })[0]
         if (edgeToDelete) {
             edges.remove(edgeToDelete)
