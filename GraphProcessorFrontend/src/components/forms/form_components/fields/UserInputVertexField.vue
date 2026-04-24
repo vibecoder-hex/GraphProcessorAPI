@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import NetworkVisualizationCanvas from "../../../graph_view/NetworkVisualisationCanvas.vue";
     import { NetworkCanvasProcessor } from "@/services/graphServices/networkCanvasService.ts";
     import { NodeMethods, EdgeMethods } from "@/services/graphServices/graphOperationsService.ts"
@@ -21,7 +21,20 @@
     const nodeCardMessage = ref<string>("")
     const edgeCardMessage = ref<string>("")
     
-    function handleNodesOperation(operationResult: IOperationResult) {
+    const isValidNodeName = computed(() => nodeNameValue.value.trim().length > 0)
+    const isValidFromNodeValue = computed(() => fromNodeValue.value.trim().length > 0)
+    const isValidToNodeValue = computed(() => toNodeValue.value.trim().length > 0)
+    const isValidDistanceNumber = computed(() => distanceNumber.value >= 0)
+    
+    function showInvalidDistanceNumberError(): void {
+        if (!isValidDistanceNumber.value) {
+            edgeCardMessage.value = "Invalid distance number"
+        } else {
+            edgeCardMessage.value = ""
+        }
+    }
+    
+    function handleNodesOperation(operationResult: IOperationResult): void {
         if (!operationResult.isValid) {
             nodeCardMessage.value = operationResult.errorMessage
         }
@@ -29,10 +42,9 @@
             nodeCardMessage.value = ""
             nodeNameValue.value = ""
         }
-        
     }
     
-    function handleEdgeMethods(operationResult: IOperationResult) {
+    function handleEdgeMethods(operationResult: IOperationResult): void {
         if (!operationResult.isValid) {
             edgeCardMessage.value = operationResult.errorMessage
         }
@@ -56,7 +68,7 @@
                     <p class="is-size-5">Enter Nodes</p>
                     <label class="label">Node name:</label>
                     <input class="input" v-model="nodeNameValue" type="text"><br><br>
-                    <button class="button" @click="handleNodesOperation(NodeMethods.addNode(nodeNameValue, distanceMap, visNodes))">Add Node</button> <button class="button" @click="handleNodesOperation(NodeMethods.deleteNode(nodeNameValue, distanceMap, visNodes))" >Delete node</button>
+                    <button :disabled="!isValidNodeName" class="button" @click="handleNodesOperation(NodeMethods.addNode(nodeNameValue, distanceMap, visNodes))">Add Node</button> <button :disabled="!isValidNodeName" class="button" @click="handleNodesOperation(NodeMethods.deleteNode(nodeNameValue, distanceMap, visNodes))" >Delete node</button>
                     <p class="has-text-warning">{{ nodeCardMessage }}</p>
                 </div>  
             </div>
@@ -71,8 +83,8 @@
                     <label>To: </label>
                     <input class="input" v-model="toNodeValue" type="text">
                     <label>Distance</label>
-                    <input class="input" v-model="distanceNumber" type="number"><br><br>
-                    <button class="button" @click="handleEdgeMethods(EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges, selectedGraphType))">Add path</button> <button class="button" @click="handleEdgeMethods(EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges, selectedGraphType))">Delete path</button>
+                    <input @change="showInvalidDistanceNumberError()" class="input" v-model="distanceNumber" type="number"><br><br>
+                    <button :disabled="!isValidFromNodeValue || !isValidToNodeValue || !isValidDistanceNumber" class="button" @click="handleEdgeMethods(EdgeMethods.addEdge(fromNodeValue, toNodeValue, distanceNumber, distanceMap, visEdges, selectedGraphType))">Add path</button> <button :disabled="!isValidFromNodeValue || !isValidToNodeValue" class="button" @click="handleEdgeMethods(EdgeMethods.deleteEdge(fromNodeValue, toNodeValue, distanceMap, visEdges, selectedGraphType))">Delete path</button>
                 </div>
                 <p class="has-text-warning">{{ edgeCardMessage }}</p>
             </div>

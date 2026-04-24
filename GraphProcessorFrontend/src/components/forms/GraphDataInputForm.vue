@@ -7,12 +7,12 @@
     import DistanceProcessingResult from "./form_components/submit_results/DistanceProcessingResult.vue";
     import type {
       IDistanceProcessingRootObject,
-      IDistanceRootObject,
+      IGraphParametersObject,
       IResponseOperationResult,
       Algorithm,
       GraphType
     } from "@/models/interfacesAndTypes.ts"
-    import { getPathFromRequest } from "@/services/http_requests/GraphAlgorithmsRequests.ts";
+    import { GraphAlgorithmsRequests } from "@/services/http_requests/GraphAlgorithmsRequests.ts";
     import {NetworkCanvasProcessor} from "@/services/graphServices/networkCanvasService.ts";
     import { DataSet, type Edge, type Node } from "vis-network/standalone"
 
@@ -34,15 +34,15 @@
     const selectedGraphType = ref<GraphType>("oriented")
     const isGraphTypeSelected = ref<boolean>(false)
 
-    function getObjectFromMap(): IDistanceRootObject {
-        const distanceObject: IDistanceRootObject = { Distances: {} }
+    function getObjectFromMap(): IGraphParametersObject {
+        const distanceObject: IGraphParametersObject = { Distances: {} }
         distanceMap.value.forEach((neighbors: Map<string, number>, node: string) => {
             distanceObject.Distances[node] = Object.fromEntries(neighbors)
         })
         return distanceObject
     }
     
-    function downloadGraphStructure(distanceObject: IDistanceRootObject) {
+    function downloadGraphStructure(distanceObject: IGraphParametersObject) {
         const link: HTMLAnchorElement = document.createElement('a');
         const distanceString: string = JSON.stringify(distanceObject, null, 4);
         const blob: Blob = new Blob([distanceString], { type: "application/json" });
@@ -54,19 +54,10 @@
         URL.revokeObjectURL(link.href);
     }
     
-    function getSelectedUrl(): string {
-        const baseUrl = `${APIURL}/${selectedAlgorithm.value}/${startVertex.value}`
-        switch (selectedAlgorithm.value) {
-            case "bfs":
-            case "dijkstra":
-                return `${baseUrl}/${targetVertex.value}`
-            case "dfs":
-                return baseUrl
-        }
-    }
     
     async function handleRequestedPath(): Promise<void> {
-        const pathRequest: IResponseOperationResult = await getPathFromRequest(getSelectedUrl(), getObjectFromMap())
+        const graphAlgorithmsRequests = new GraphAlgorithmsRequests(APIURL, getObjectFromMap(), selectedAlgorithm.value, startVertex.value, targetVertex.value)
+        const pathRequest: IResponseOperationResult = await graphAlgorithmsRequests.getPathFromRequest();
         if (pathRequest && pathRequest.operation.isValid) {
             const shortestPath: IDistanceProcessingRootObject | null  = pathRequest.responseData
             if (shortestPath !== null) {

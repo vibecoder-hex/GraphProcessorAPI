@@ -14,11 +14,11 @@ export interface IDistanceProcessingRootObject {
     result: IDistanceProcessingResultObject
 }
 
-export interface IDistanceRootObject {
-    Distances: IDistanceGraphStructureObject
+export interface IGraphParametersObject {
+    Distances: IDistanceStructureObject
 }
 
-export interface IDistanceGraphStructureObject {
+export interface IDistanceStructureObject {
         [vertex: string]: {
             [neighbor: string]: number
     }
