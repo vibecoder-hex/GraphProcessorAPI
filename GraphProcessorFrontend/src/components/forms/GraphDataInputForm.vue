@@ -12,7 +12,7 @@
       Algorithm,
       GraphType
     } from "@/models/interfacesAndTypes.ts"
-    import { GraphAlgorithmsRequests } from "@/services/http_requests/GraphAlgorithmsRequests.ts";
+    import  { type IGraphAlgorithmsRequests, GraphAlgorithmsRequests } from "@/services/http_requests/GraphAlgorithmsRequests.ts";
     import {NetworkCanvasProcessor} from "@/services/graphServices/networkCanvasService.ts";
     import { DataSet, type Edge, type Node } from "vis-network/standalone"
 
@@ -23,7 +23,6 @@
     const startVertex = ref<string>("")
     const targetVertex = ref<string>("")
 
-    const showGraphStructure = ref<boolean>(false)
     const distanceMap = ref<Map<string, Map<string, number>>>(new Map())
     const graphProcessingResult = ref<IDistanceProcessingRootObject | null>(null)
     const errorMessage = ref<string>("")
@@ -41,22 +40,9 @@
         })
         return distanceObject
     }
-    
-    function downloadGraphStructure(distanceObject: IGraphParametersObject) {
-        const link: HTMLAnchorElement = document.createElement('a');
-        const distanceString: string = JSON.stringify(distanceObject, null, 4);
-        const blob: Blob = new Blob([distanceString], { type: "application/json" });
-        
-        link.download = 'graph_structure.json';
-        link.href = URL.createObjectURL(blob);
-        link.click();
-        
-        URL.revokeObjectURL(link.href);
-    }
-    
-    
+      
     async function handleRequestedPath(): Promise<void> {
-        const graphAlgorithmsRequests = new GraphAlgorithmsRequests(APIURL, getObjectFromMap(), selectedAlgorithm.value, startVertex.value, targetVertex.value)
+        const graphAlgorithmsRequests: IGraphAlgorithmsRequests = new GraphAlgorithmsRequests(APIURL, getObjectFromMap(), selectedAlgorithm.value, startVertex.value, targetVertex.value)
         const pathRequest: IResponseOperationResult = await graphAlgorithmsRequests.getPathFromRequest();
         if (pathRequest && pathRequest.operation.isValid) {
             const shortestPath: IDistanceProcessingRootObject | null  = pathRequest.responseData
@@ -84,17 +70,6 @@
                               v-model:visEdges="visEdges"
                               v-model:visNodes="visNodes"/>
         <div v-if="distanceMap.size > 0" class="graph-structure">
-            <div>
-                <label>Show graph structure</label>
-                <input type="checkbox" v-model="showGraphStructure">
-            </div>
-            <div v-if="showGraphStructure">
-                <pre><code>
-                    {{ JSON.stringify(getObjectFromMap(), null, 2) }}
-                </code></pre>
-                <button class="button is-text" @click="downloadGraphStructure(getObjectFromMap())" >Download graph structure</button>
-            </div>
-            
            <AlgorithmSelector v-model:selectedAlgorithm="selectedAlgorithm" />
            <PathSearchField v-model:selectedAlgorithm="selectedAlgorithm"
                                      v-model:startVertex="startVertex"

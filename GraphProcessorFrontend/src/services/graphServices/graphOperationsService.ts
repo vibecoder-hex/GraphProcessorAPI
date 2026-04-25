@@ -5,7 +5,6 @@ import type { IOperationResult, GraphType } from "@/models/interfacesAndTypes.ts
 type DistanceMap = Map<string, Map<string, number>>
 
 
-
 export class NodeMethods {
     public static addNode(nodeKey: string, distances: DistanceMap, nodes: DataSet<Node>): IOperationResult {
         if (!distances.has(nodeKey)) {

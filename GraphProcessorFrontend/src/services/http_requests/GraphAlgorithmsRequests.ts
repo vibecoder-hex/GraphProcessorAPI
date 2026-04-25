@@ -1,7 +1,11 @@
 import axios from 'axios'
 import type { IGraphParametersObject, IResponseOperationResult, Algorithm } from "@/models/interfacesAndTypes.ts";
 
-export class GraphAlgorithmsRequests {
+export interface IGraphAlgorithmsRequests {
+    getPathFromRequest(): Promise<IResponseOperationResult>
+}
+
+export class GraphAlgorithmsRequests implements IGraphAlgorithmsRequests {
     private readonly _apiUrl: string;
     private readonly _selectedAlgorithm: Algorithm;
     private readonly _distanceJSONObject: IGraphParametersObject;
