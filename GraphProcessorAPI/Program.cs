@@ -1,7 +1,9 @@
 using GraphProcessorAPI.Services;
+using GraphProcessorAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddControllers();
 
 builder.Services.AddHttpLogging(logging => { });
@@ -11,6 +13,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IDistanceGraphProcessorService, DistanceGraphProcessingService>();
+builder.Services.AddDbContextPool<GraphProcessorContext>(options =>
+{
+    options.UseNpgsql(databaseConnectionString);
+});
 
 var app = builder.Build();
 
