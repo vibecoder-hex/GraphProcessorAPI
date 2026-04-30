@@ -5,9 +5,6 @@ namespace GraphProcessorAPI.Data;
 
 public partial class GraphProcessorContext : DbContext
 {
-    public GraphProcessorContext()
-    {
-    }
 
     public GraphProcessorContext(DbContextOptions<GraphProcessorContext> options)
         : base(options)

@@ -1,6 +1,9 @@
 using GraphProcessorAPI.Services;
 using GraphProcessorAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -18,6 +21,22 @@ builder.Services.AddDbContextPool<GraphProcessorContext>(options =>
     options.UseNpgsql(databaseConnectionString);
 });
 
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["JwtParams:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JwtParams:Audience"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtParams:SecretKey"])),
+            ValidateIssuerSigningKey = true
+        };
+    });
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -34,6 +53,9 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler();
 
 app.MapControllers();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/api/health", () => Results.Ok(new { status = "Welcome to Graph Processor API" }));
 
