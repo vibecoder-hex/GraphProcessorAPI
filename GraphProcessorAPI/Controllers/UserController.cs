@@ -1,10 +1,7 @@
-﻿using GraphProcessorAPI.Data;
-using GraphProcessorAPI.Models;
+﻿using GraphProcessorAPI.Models;
+using GraphProcessorAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace GraphProcessorAPI.Controllers
@@ -14,31 +11,34 @@ namespace GraphProcessorAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
-        private readonly GraphProcessorContext _context;
         private readonly IConfiguration _configuration;
+        private readonly ILoginService _loginService;
         
-        public UserController(ILogger<UserController> logger, GraphProcessorContext context, IConfiguration configuration)
+        public UserController(ILogger<UserController> logger, IConfiguration configuration, ILoginService loginService)
         {
             _logger = logger;
-            _context = context;
             _configuration = configuration;
+            _loginService = loginService;
         }
 
         [HttpPost("login")]
-        public IActionResult Login(UserLoginDto userData)
+        public IActionResult Login([FromBody] UserLoginDto userData)
         {
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, userData.Username) };
-            var jwtToken = new JwtSecurityToken
-                (
-                   issuer: _configuration["JwtParams:Issuer"],
-                   audience: _configuration["JwtParams:Audience"],
-                   claims: claims,
-                   expires: DateTime.UtcNow.AddMinutes(30),
-                   signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtParams:SecretKey"])), SecurityAlgorithms.HmacSha256)
-                );
-            string tokenString = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-            _logger.LogInformation("User {Username} logged in and received token: {Token}", userData.Username, tokenString);
-            return Ok(new { Token = tokenString });
+            var loginResult = _loginService.Login(userData.Username, userData.Password);
+            if (!loginResult.IsValid)
+            {
+                _logger.LogError($"Login failed for user {userData.Username}");
+                return Unauthorized(new { Error = loginResult.ErrorMessage });
+            }
+            _logger.LogInformation($"User {userData.Username} logged in and received token: {loginResult.TokenString}");
+            return Ok(new { TokenString = loginResult.TokenString });
+        }
+
+        [Authorize]
+        [HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            return Ok(new { Message = "This is a protected endpoint." });
         }
     }
 }

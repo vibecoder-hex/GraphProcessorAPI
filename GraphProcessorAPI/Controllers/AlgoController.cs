@@ -19,7 +19,7 @@ namespace GraphProcessorAPI.Controllers
         }
         
         [HttpPost("dijkstra/{start}/{target}")]
-        public IActionResult DijkstraHandle(string start, string target, DistanceDataJsonDTO jsonData)
+        public IActionResult DijkstraHandle([FromQuery] string start, [FromQuery] string target, [FromBody] DistanceDataJsonDTO jsonData)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -44,7 +44,7 @@ namespace GraphProcessorAPI.Controllers
         }
 
         [HttpPost("bfs/{start}/{target}")]
-        public IActionResult BfsHandle(string start, string target, DistanceDataJsonDTO jsonData)
+        public IActionResult BfsHandle([FromQuery] string start, [FromQuery] string target, [FromBody] DistanceDataJsonDTO jsonData)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -70,7 +70,7 @@ namespace GraphProcessorAPI.Controllers
         }
 
         [HttpPost("dfs/{start}")]
-        public IActionResult DfsHandle(string start, DistanceDataJsonDTO jsonData)
+        public IActionResult DfsHandle([FromQuery] string start, [FromBody] DistanceDataJsonDTO jsonData)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();

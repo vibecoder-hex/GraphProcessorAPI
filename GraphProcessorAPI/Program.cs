@@ -1,12 +1,14 @@
 using GraphProcessorAPI.Services;
 using GraphProcessorAPI.Data;
+using GraphProcessorAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-var databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var databaseConnectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 builder.Services.AddControllers();
 
 builder.Services.AddHttpLogging(logging => { });
@@ -15,7 +17,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddProblemDetails();
+
 builder.Services.AddScoped<IDistanceGraphProcessorService, DistanceGraphProcessingService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 builder.Services.AddDbContextPool<GraphProcessorContext>(options =>
 {
     options.UseNpgsql(databaseConnectionString);
