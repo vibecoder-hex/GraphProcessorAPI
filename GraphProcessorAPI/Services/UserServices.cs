@@ -1,7 +1,9 @@
 ﻿using GraphProcessorAPI.Data;
 using GraphProcessorAPI.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -13,19 +15,41 @@ namespace GraphProcessorAPI.Services
         LoginResult Login(string username, string password);
     }
 
-    public class LoginService : ILoginService
+    public interface IUserService
+    {
+        Task<UserResult> GetUserByNameAsync(string username);
+    }
+
+    public class UserService : IUserService
     {
         private readonly GraphProcessorContext _dbContext;
-        private readonly IConfiguration _configuration;
-        private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly ILogger<LoginService> _logger;
 
-        public LoginService(GraphProcessorContext dbContext, IConfiguration configuration, IPasswordHasher<User> passwordHasher, ILogger<LoginService> logger)
+        public UserService(GraphProcessorContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<UserResult> GetUserByNameAsync(string username)
+        {
+            var user = await _dbContext.Users
+                .SingleOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+            {
+                return new UserResult { IsValid = false, ErrorMessage = $"User by {username} not found" };
+            }
+            return new UserResult { IsValid = true, SelectedUser = user };
+        }
+    }
+
+    public class LoginService : ILoginService
+    {
+        private readonly IConfiguration _configuration;
+        private readonly IPasswordHasher<User> _passwordHasher;
+
+        public LoginService(IConfiguration configuration, IPasswordHasher<User> passwordHasher)
+        {
             _configuration = configuration;
             _passwordHasher = passwordHasher;
-            _logger = logger;
         }
 
         private string JsonWebTokenString(string username)

@@ -11,14 +11,14 @@ namespace GraphProcessorAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
-        private readonly IConfiguration _configuration;
         private readonly ILoginService _loginService;
+        private readonly IUserService _userService;
         
-        public UserController(ILogger<UserController> logger, IConfiguration configuration, ILoginService loginService)
+        public UserController(ILogger<UserController> logger, ILoginService loginService, IUserService userService)
         {
             _logger = logger;
-            _configuration = configuration;
             _loginService = loginService;
+            _userService = userService;
         }
 
         [HttpPost("login")]
@@ -36,9 +36,10 @@ namespace GraphProcessorAPI.Controllers
 
         [Authorize]
         [HttpGet("profile")]
-        public IActionResult Profile()
+        public ActionResult Profile()
         {
-            return Ok(new { Message = "This is a protected endpoint." });
+            string username = HttpContext.User.Identity?.Name;
+            return Ok(new { Username = username });
         }
     }
 }

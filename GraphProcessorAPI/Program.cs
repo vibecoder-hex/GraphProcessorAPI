@@ -20,6 +20,7 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddScoped<IDistanceGraphProcessorService, DistanceGraphProcessingService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDbContextPool<GraphProcessorContext>(options =>
