@@ -3,7 +3,6 @@ using GraphProcessorAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,7 +11,7 @@ namespace GraphProcessorAPI.Services
 {
     public interface ILoginService
     {
-        LoginResult Login(string username, string password);
+        Task<LoginResult> Login(string username, string password);
     }
 
     public interface IUserService
@@ -23,20 +22,23 @@ namespace GraphProcessorAPI.Services
     public class UserService : IUserService
     {
         private readonly GraphProcessorContext _dbContext;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(GraphProcessorContext dbContext)
+        public UserService(GraphProcessorContext dbContext, ILogger<UserService> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<UserResult> GetUserByNameAsync(string username)
         {
             var user = await _dbContext.Users
                 .SingleOrDefaultAsync(u => u.Username == username);
+
             if (user == null)
-            {
                 return new UserResult { IsValid = false, ErrorMessage = $"User by {username} not found" };
-            }
+
+            _logger.LogInformation($"Successfull selected {user} by {username}");
             return new UserResult { IsValid = true, SelectedUser = user };
         }
     }
@@ -45,11 +47,13 @@ namespace GraphProcessorAPI.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IUserService _userService;
 
-        public LoginService(IConfiguration configuration, IPasswordHasher<User> passwordHasher)
+        public LoginService(IConfiguration configuration, IPasswordHasher<User> passwordHasher, IUserService userService)
         {
             _configuration = configuration;
             _passwordHasher = passwordHasher;
+            _userService = userService;
         }
 
         private string JsonWebTokenString(string username)
@@ -66,15 +70,18 @@ namespace GraphProcessorAPI.Services
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
         }
 
-        public LoginResult Login(string username, string password)
+        public async Task<LoginResult> Login(string username, string password)
         {
-            var user = new User { Username = "vibecoderhex", PasswordHash = "AQAAAAIAAYagAAAAEAGonv99quIdG961Lyo9pkCqGdPCoeEeRFujpiWL1s2zgTIYRzbAIu+YWYNqP7A0JA==" };
+            var userResult = await _userService.GetUserByNameAsync(username);
+            if (!userResult.IsValid)
+                return new LoginResult { IsValid = false, ErrorMessage = "Invalid username" };
+
+            var user = userResult.SelectedUser;
             var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
 
-            if (username != user.Username || verificationResult == PasswordVerificationResult.Failed)
-            {
-                return new LoginResult { IsValid = false, ErrorMessage = "Invalid username or password"};
-            }
+            if (verificationResult == PasswordVerificationResult.Failed)
+                return new LoginResult { IsValid = false, ErrorMessage = "Invalid password"};
+
             var tokenString = JsonWebTokenString(username);
             return new LoginResult { IsValid = true, TokenString = tokenString };
         }

@@ -166,7 +166,7 @@ public partial class GraphProcessorContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("last_name");
             entity.Property(e => e.PasswordHash)
-                .HasMaxLength(64)
+                .HasMaxLength(256)
                 .IsFixedLength()
                 .HasColumnName("password_hash");
             entity.Property(e => e.Phone)

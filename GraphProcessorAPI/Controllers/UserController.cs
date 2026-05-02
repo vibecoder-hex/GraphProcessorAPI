@@ -22,13 +22,13 @@ namespace GraphProcessorAPI.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] UserLoginDto userData)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto userData)
         {
-            var loginResult = _loginService.Login(userData.Username, userData.Password);
+            var loginResult = await _loginService.Login(userData.Username, userData.Password);
             if (!loginResult.IsValid)
             {
                 _logger.LogError($"Login failed for user {userData.Username}");
-                return Unauthorized(new { Error = loginResult.ErrorMessage });
+                return Unauthorized(new { Error = loginResult.ErrorMessage});
             }
             _logger.LogInformation($"User {userData.Username} logged in and received token: {loginResult.TokenString}");
             return Ok(new { TokenString = loginResult.TokenString });
@@ -36,10 +36,27 @@ namespace GraphProcessorAPI.Controllers
 
         [Authorize]
         [HttpGet("profile")]
-        public ActionResult Profile()
+        public async Task<ActionResult> Profile()
         {
-            string username = HttpContext.User.Identity?.Name;
-            return Ok(new { Username = username });
+            string? username = HttpContext.User.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+                return Unauthorized(new { Error = "Username does not found in http context" });
+
+            var userResult = await _userService.GetUserByNameAsync(username);
+            if (!userResult.IsValid)
+                return Unauthorized(new { Error = userResult.ErrorMessage });
+
+            var dbUser = userResult.SelectedUser;
+            var userProfile = new UserProfileDto
+            {
+                Username = dbUser.Username,
+                FirstName = dbUser.FirstName,
+                LastName = dbUser.LastName,
+                PhoneNumber = dbUser.Phone,
+                Email = dbUser.Email
+            };
+
+            return Ok(userProfile);
         }
     }
 }
