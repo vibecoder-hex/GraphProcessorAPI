@@ -1,4 +1,4 @@
-# GraphProcessorAPI
+# GraphProcessor
 
 ## Что это такое?
 Платформа для построения графовых маршрутов, поиска кратчайших путей и вычисления расстояний между вершинами.
@@ -51,6 +51,7 @@
 Как запустить?
 ```
 git clone [url]
+cd GraphProcessor
 docker compose pull
 docker compose up -d --build
 ```
