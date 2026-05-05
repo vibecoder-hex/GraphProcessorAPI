@@ -36,11 +36,18 @@ builder.Services.AddScoped<IDistanceGraphProcessorService, DistanceGraphProcessi
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 
 builder.Services.AddDbContextPool<GraphProcessorContext>(options =>
-{
-    options.UseNpgsql(databaseConnectionString);
-});
+    options.UseNpgsql(
+        databaseConnectionString, o => 
+        {
+            o.MapEnum<UserRole>("accountrole");
+            o.MapEnum<GraphType>("graphtype");
+            o.MapEnum<AlgorithmType>("algorithm_type");
+        }
+    ));
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

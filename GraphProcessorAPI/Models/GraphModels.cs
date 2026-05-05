@@ -1,5 +1,8 @@
 ﻿namespace GraphProcessorAPI.Models
 {
+    public enum AlgorithmType { Dfs, Bfs, Dijkstra }
+    public enum GraphType { Oriented, NonOriented }
+
     public partial class Graph
     {
         public int GraphId { get; set; }
@@ -11,6 +14,8 @@
         public DateOnly Creationat { get; set; }
 
         public string Structure { get; set; } = null!;
+
+        public GraphType Type { get; set; }
 
         public int UserId { get; set; }
 
@@ -38,6 +43,8 @@
         public List<string> ShortestPath { get; set; } = null!;
 
         public int? TotalDistance { get; set; }
+
+        public AlgorithmType Algorithm { get; set; }
 
         public virtual Graph Graph { get; set; } = null!;
     }

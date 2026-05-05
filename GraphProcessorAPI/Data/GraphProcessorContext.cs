@@ -29,9 +29,9 @@ public partial class GraphProcessorContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .HasPostgresEnum("accountrole", new[] { "User", "Admin" })
-            .HasPostgresEnum("algorithm_type", new[] { "Dijkstra", "BFS", "DFS" })
-            .HasPostgresEnum("graphtype", new[] { "Oriented", "Non-oriented" });
+            .HasPostgresEnum<UserRole>("accountrole")
+            .HasPostgresEnum<AlgorithmType>("algorithm_type")
+            .HasPostgresEnum<GraphType>("graphtype");
 
         modelBuilder.Entity<Edge>(entity =>
         {
@@ -81,6 +81,9 @@ public partial class GraphProcessorContext : DbContext
                 .HasColumnType("json")
                 .HasColumnName("structure");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Type)
+                .HasColumnName("type")
+                .HasColumnType("graphtype");
 
             entity.HasOne(d => d.User).WithMany(p => p.Graphs)
                 .HasForeignKey(d => d.UserId)
@@ -138,7 +141,9 @@ public partial class GraphProcessorContext : DbContext
                 .HasColumnName("target_vertex");
             entity.Property(e => e.TimeInNs).HasColumnName("time_in_ns");
             entity.Property(e => e.TotalDistance).HasColumnName("total_distance");
-
+            entity.Property(e => e.Algorithm)
+                .HasColumnName("algorithm")
+                .HasColumnType("algorithm_type");
             entity.HasOne(d => d.Graph).WithMany(p => p.ProcessingResults)
                 .HasForeignKey(d => d.GraphId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -175,6 +180,9 @@ public partial class GraphProcessorContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(40)
                 .HasColumnName("username");
+            entity.Property(e => e.Role)
+                .HasColumnName("role")
+                .HasColumnType("accountrole");
         });
 
         OnModelCreatingPartial(modelBuilder);

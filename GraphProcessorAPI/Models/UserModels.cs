@@ -1,5 +1,6 @@
 ﻿namespace GraphProcessorAPI.Models
 {
+    public enum UserRole { User, Admin };
     public partial class User
     {
         public int UserId { get; set; }
@@ -19,6 +20,8 @@
         public string PasswordHash { get; set; } = null!;
 
         public bool IsActive { get; set; }
+
+        public UserRole Role { get; set; }
 
         public virtual ICollection<Graph> Graphs { get; set; } = new List<Graph>();
     }

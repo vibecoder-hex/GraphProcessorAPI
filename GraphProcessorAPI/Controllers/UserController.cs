@@ -12,13 +12,15 @@ namespace GraphProcessorAPI.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly ILoginService _loginService;
+        private readonly IRegistrationService _registrationService;
         private readonly IUserService _userService;
         
-        public UserController(ILogger<UserController> logger, ILoginService loginService, IUserService userService)
+        public UserController(ILogger<UserController> logger, ILoginService loginService, IUserService userService, IRegistrationService registrationService)
         {
             _logger = logger;
             _loginService = loginService;
             _userService = userService;
+            _registrationService = registrationService;
         }
 
         [HttpPost("login")]
@@ -32,6 +34,19 @@ namespace GraphProcessorAPI.Controllers
             }
             _logger.LogInformation($"User {userData.Username} logged in and received token: {loginResult.TokenString}");
             return Ok(new { TokenString = loginResult.TokenString });
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] UserRegistrationDto userData)
+        {
+            var registerResult = await _registrationService.Register(userData.Username, userData.Password, userData.RepeatPassword, userData.FirstName, userData.LastName, userData.Email, userData.Phone);
+            if (!registerResult.IsValid)
+            {
+                _logger.LogError($"Registration filed");
+                return Unauthorized(new { Error = registerResult.ErrorMessage  });
+            }
+            _logger.LogInformation($" {userData.Username} registered and recieved token: { registerResult.TokenString } ");
+            return Ok(new { TokenString = registerResult.TokenString  });
         }
 
         [Authorize]
